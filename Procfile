@@ -1,0 +1,1 @@
+web: gunicorn grabeat.wsgi --log-file -

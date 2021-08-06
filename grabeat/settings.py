@@ -14,7 +14,13 @@ SECRET_KEY = "django-insecure-k0h%=i3%&cro17a(rwds%7@3tf4%ak8@w9jdlpp$%df37yjyr!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "wordpress.dhakalvishal.com.np",
+    "134.122.44.223",
+    ".dhakalvishal.com.np",
+    "grabeatnp.herokuapp.com",
+]
 
 
 # Application definition
@@ -117,7 +123,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(BASE_DIR, "media")
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://grabeat.vercel.app",
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
