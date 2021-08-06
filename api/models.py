@@ -66,3 +66,10 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.username + " Ordered " + self.status
+
+
+class Advertisement(models.Model):
+    ad = models.FileField()
+
+    def __str__(self):
+        return self.ad.url

@@ -12,14 +12,21 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes,
 )
-from .models import FoodItem, FoodCategory, Order, OrderItem
+from .models import FoodItem, FoodCategory, Order, OrderItem, Advertisement
 from .serializers import (
+    AdvertisementSerializer,
     FoodCategorySerializer,
     FoodItemSerializer,
     OrderSerializer,
     OrderItemSerializer,
     UserSerializer,
 )
+
+
+def ads(request):
+    aditems = Advertisement.objects.all()
+    ad_serializer = AdvertisementSerializer(aditems, many=True)
+    return Response(ad_serializer.data)
 
 
 @api_view(["GET"])

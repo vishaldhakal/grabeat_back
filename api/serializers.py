@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from . import models
 
+class AdvertisementSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = models.Advertisement
 
 class FoodCategorySerializer(serializers.ModelSerializer):
     class Meta:
