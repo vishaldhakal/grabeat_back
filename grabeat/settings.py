@@ -20,7 +20,7 @@ ALLOWED_HOSTS = [
     "134.122.44.223",
     ".dhakalvishal.com.np",
     "grabeatnp.herokuapp.com",
-    "grabeat-back-6tg3y.ondigitalocean.app"
+    "grabeat-back-6tg3y.ondigitalocean.app",
 ]
 
 
@@ -80,6 +80,17 @@ DATABASES = {
     }
 }
 
+""" DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd7fmqa7s6gm627',
+        'USER': 'mjpyblrmlwswlo',
+        'PASSWORD': '026dffa21ae3079dcc2600f405a399a7bf4945cec72e83bd324f4a5c9d5d3707',
+        'HOST': 'ec2-54-205-232-84.compute-1.amazonaws.com',
+        'PORT': '5432',
+    }
+} """
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -124,11 +135,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(BASE_DIR, "media")
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://grabeat.vercel.app",
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
