@@ -23,6 +23,7 @@ from .serializers import (
 )
 
 
+@api_view(["GET"])
 def ads(request):
     aditems = Advertisement.objects.all()
     ad_serializer = AdvertisementSerializer(aditems, many=True)
