@@ -20,6 +20,7 @@ ALLOWED_HOSTS = [
     "134.122.44.223",
     ".dhakalvishal.com.np",
     "grabeatnp.herokuapp.com",
+    "grabeat-back-6tg3y.ondigitalocean.app"
 ]
 
 
