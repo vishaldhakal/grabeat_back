@@ -40,6 +40,13 @@ def foodlists(request):
 
 
 @api_view(["GET"])
+def categorylists(request):
+    fooditems = FoodCategory.objects.all()
+    food_serializer = FoodCategorySerializer(fooditems, many=True)
+    return Response(food_serializer.data)
+
+
+@api_view(["GET"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def orderslists(request):
@@ -76,3 +83,37 @@ def submitcart(request):
         return JsonResponse(
             {"error": "Order Submission Failed"}, status=status.HTTP_400_BAD_REQUEST
         )
+
+
+@api_view(["GET"])
+def foodlists_search(request):
+    if request.method == "GET":
+        category = request.GET.get("category", "All")
+        pricemin = request.GET.get("min", 0)
+        pricemax = request.GET.get("max", 0)
+        if pricemax == "":
+            pricemax = "0"
+        if pricemin == "":
+            pricemin = "0"
+        if category == "All":
+            if pricemax == "0":
+                foods = FoodItem.objects.filter(price__gte=int(pricemin))
+            else:
+                foods = FoodItem.objects.filter(
+                    price__gte=int(pricemin), price__lte=int(pricemax)
+                )
+        else:
+            foodcats = FoodCategory.objects.get(name=category)
+            if pricemax == "0":
+                foods = FoodItem.objects.filter(
+                    category=foodcats, price__gte=int(pricemin)
+                )
+            else:
+                foods = FoodItem.objects.filter(
+                    category=int(foodcats),
+                    price__gte=int(pricemin),
+                    price__lte=int(pricemax),
+                )
+
+        foodser = FoodItemSerializer(foods, many=True)
+        return Response(foodser.data)
