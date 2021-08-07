@@ -91,10 +91,10 @@ def foodlists_search(request):
         category = request.GET.get("category", "All")
         pricemin = request.GET.get("min", 0)
         pricemax = request.GET.get("max", 0)
-        """ if pricemax == "":
+        if pricemax == "":
             pricemax = "0"
         if pricemin == "":
-            pricemin = "0" """
+            pricemin = "0"
         if category == "All":
             if pricemax == "0":
                 foods = FoodItem.objects.filter(price__gte=int(pricemin))
@@ -110,7 +110,7 @@ def foodlists_search(request):
                 )
             else:
                 foods = FoodItem.objects.filter(
-                    category=int(foodcats),
+                    category=foodcats,
                     price__gte=int(pricemin),
                     price__lte=int(pricemax),
                 )
