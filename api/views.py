@@ -92,7 +92,7 @@ def paymentt(request):
     try:
         datas = JSONParser().parse(request)
         userr = User.objects.get(id=request.user.id)
-        ordee = Order.objects.all()
+        ordee = Order.objects.filter(payment_status="Unpaid")
         for data in ordee:
             data.payment_method = datas["paymentmethod"]
             data.payment_status = "Verifying"
