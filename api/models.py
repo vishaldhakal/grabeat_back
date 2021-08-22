@@ -34,7 +34,6 @@ class FoodItem(models.Model):
 
 
 class OrderItem(models.Model):
-    CART_STATUS = (("Incart", "Incart"), ("Ordered", "Ordered"))
     food_item = models.ForeignKey(
         FoodItem, on_delete=models.CASCADE, blank=True, null=True
     )
@@ -52,11 +51,31 @@ class OrderItem(models.Model):
 
 
 class Order(models.Model):
+    PAYMENT_STATUS = (
+        ("Verifying", "Verifying"),
+        ("Paid", "Paid"),
+        ("Unpaid", "Unpaid"),
+    )
+
+    PAYMENT_METHOD = (
+        ("Manually Paid", "Manually Paid"),
+        ("Esewa", "Esewa"),
+        ("Mobile Banking", "Mobile Banking"),
+        ("Paypal", "Paypal"),
+        ("Others", "Others"),
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_note = models.TextField()
     orderitems = models.ManyToManyField(OrderItem)
     status = models.CharField(max_length=400, default="Order Placed")
     orderdate = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    payment_status = models.CharField(
+        max_length=500, choices=PAYMENT_STATUS, default="Unpaid"
+    )
+    payment_method = models.CharField(
+        max_length=500, choices=PAYMENT_METHOD, default="Manually Paid"
+    )
 
     def ordertotal(self):
         total = 0

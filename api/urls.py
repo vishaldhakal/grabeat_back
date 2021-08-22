@@ -8,6 +8,7 @@ from .views import (
     ads,
     categorylists,
     foodlists_search,
+    paymentt,
 )
 
 urlpatterns = [
@@ -17,5 +18,6 @@ urlpatterns = [
     path("ads/", ads),
     path("orderslists/", orderslists),
     path("submitcart/", submitcart),
+    path("payorders/", paymentt),
     path("api-token-auth/", obtain_auth_token, name="api_token_auth"),
 ]

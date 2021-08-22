@@ -85,6 +85,29 @@ def submitcart(request):
         )
 
 
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def paymentt(request):
+    try:
+        datas = JSONParser().parse(request)
+        userr = User.objects.get(id=request.user.id)
+        ordee = Order.objects.all()
+        for data in ordee:
+            data.payment_method = datas["paymentmethod"]
+            data.payment_status = datas["Verifying"]
+            data.save()
+
+        return JsonResponse(
+            {"success": "Payment Submission Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Order Payment Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
 @api_view(["GET"])
 def foodlists_search(request):
     if request.method == "GET":
