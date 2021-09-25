@@ -112,31 +112,19 @@ def paymentt(request):
 def foodlists_search(request):
     if request.method == "GET":
         category = request.GET.get("category", "All")
-        pricemin = request.GET.get("min", 0)
-        pricemax = request.GET.get("max", 0)
-        if pricemax == "":
-            pricemax = "0"
-        if pricemin == "":
-            pricemin = "0"
+        sorting = request.GET.get("sorting", 1)
+
         if category == "All":
-            if pricemax == "0":
-                foods = FoodItem.objects.filter(price__gte=int(pricemin))
+            if sorting == "1":
+                foods = FoodItem.objects.all().order_by("price")
             else:
-                foods = FoodItem.objects.filter(
-                    price__gte=int(pricemin), price__lte=int(pricemax)
-                )
+                foods = FoodItem.objects.all().order_by("-price")
         else:
             foodcats = FoodCategory.objects.get(name=category)
-            if pricemax == "0":
-                foods = FoodItem.objects.filter(
-                    category=foodcats, price__gte=int(pricemin)
-                )
+            if sorting == "1":
+                foods = FoodItem.objects.filter(category=foodcats).order_by("price")
             else:
-                foods = FoodItem.objects.filter(
-                    category=foodcats,
-                    price__gte=int(pricemin),
-                    price__lte=int(pricemax),
-                )
+                foods = FoodItem.objects.filter(category=foodcats).order_by("-price")
 
         foodser = FoodItemSerializer(foods, many=True)
         return Response(foodser.data)

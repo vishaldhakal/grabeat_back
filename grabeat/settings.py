@@ -14,14 +14,7 @@ SECRET_KEY = "django-insecure-k0h%=i3%&cro17a(rwds%7@3tf4%ak8@w9jdlpp$%df37yjyr!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "wordpress.dhakalvishal.com.np",
-    "134.122.44.223",
-    ".dhakalvishal.com.np",
-    "grabeatnp.herokuapp.com",
-    "grabeat-back-6tg3y.ondigitalocean.app",
-]
+ALLOWED_HOSTS = []
 
 
 # Application definition
