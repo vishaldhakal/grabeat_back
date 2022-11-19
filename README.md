@@ -39,6 +39,12 @@
 
 ###
 
-8. https://grabeatnp.herokuapp.com/api/delete-table/
+8. https://grabeatnp.herokuapp.com/api/table-single/<int:id>/
+   Input : Table Id
+   Output : Table with that id
+
+###
+
+9. https://grabeatnp.herokuapp.com/api/delete-table/
    Input : Table Id
    Output : Success or error message

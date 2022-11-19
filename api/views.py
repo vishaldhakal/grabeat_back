@@ -169,6 +169,20 @@ def addTable(request):
         )
 
 
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def singleTable(request, id):
+    try:
+        table = Table.objects.get(id=id)
+        table_serializer = TableSerializer(table)
+        return Response(table_serializer.data)
+    except:
+        return JsonResponse(
+            {"error": "Invalid Table"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])

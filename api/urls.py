@@ -10,6 +10,7 @@ from .views import (
     addTable,
     updateTable,
     deleteTable,
+    singleTable,
     CustomAuthToken,
 )
 
@@ -22,6 +23,7 @@ urlpatterns = [
     path("payorders/", paymentt),
     path("tablelists/", tablelists),
     path("add-table/", addTable),
+    path("table-single/<int:id>/", singleTable),
     path("update-table/", updateTable),
     path("delete-table/", deleteTable),
     path("inventory/", include("inventory.urls")),
