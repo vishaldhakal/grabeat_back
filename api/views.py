@@ -189,10 +189,9 @@ def singleTable(request, id):
 def updateTable(request):
     try:
         datas = JSONParser().parse(request)
-        table = Table.objects.get(table_name=datas["id"])
+        table = Table.objects.get(id=datas["id"])
         table.table_name = datas["table_name"]
         table.save()
-
         return JsonResponse(
             {"success": "Table Updated Successfull"},
             status=status.HTTP_201_CREATED,
@@ -209,7 +208,7 @@ def updateTable(request):
 def deleteTable(request):
     try:
         datas = JSONParser().parse(request)
-        table = Table.objects.get(table_name=datas["id"])
+        table = Table.objects.get(id=datas["id"])
         table.delete()
 
         return JsonResponse(

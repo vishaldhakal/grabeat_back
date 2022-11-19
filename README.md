@@ -6,11 +6,6 @@
 
 ###
 
-2. https://grabeatnp.herokuapp.com/api/tablelists/
-   Output : List of all tables
-
-###
-
 3. https://grabeatnp.herokuapp.com/api/categorylists/
    Output : List of all food categories
 
@@ -27,7 +22,12 @@
 
 ### Table Management
 
-6. https://grabeatnp.herokuapp.com/api/add-table/
+2. https://grabeatnp.herokuapp.com/api/tablelists/
+   Output : List of all tables
+
+###
+
+3. https://grabeatnp.herokuapp.com/api/add-table/
    Input : Table Name
    Output : Success or error message
 
