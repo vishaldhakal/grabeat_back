@@ -1,23 +1,23 @@
-from django.contrib import admin
-from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
+from django.urls import path, include
 from .views import (
     foodlists,
     submitcart,
     orderslists,
-    ads,
     categorylists,
     foodlists_search,
     paymentt,
+    tablelists,
+    CustomAuthToken,
 )
 
 urlpatterns = [
     path("foodlists/", foodlists),
     path("foodlists_search/", foodlists_search),
     path("categorylists/", categorylists),
-    path("ads/", ads),
     path("orderslists/", orderslists),
     path("submitcart/", submitcart),
     path("payorders/", paymentt),
-    path("api-token-auth/", obtain_auth_token, name="api_token_auth"),
+    path("tablelists/", tablelists),
+    path("inventory/", include("inventory.urls")),
+    path("api-token-auth/", CustomAuthToken.as_view(), name="api_token_auth"),
 ]

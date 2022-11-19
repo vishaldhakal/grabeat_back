@@ -12,22 +12,35 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes,
 )
-from .models import FoodItem, FoodCategory, Order, OrderItem, Advertisement
+from .models import FoodItem, FoodCategory, Order, OrderItem,Table
 from .serializers import (
-    AdvertisementSerializer,
     FoodCategorySerializer,
     FoodItemSerializer,
     OrderSerializer,
     OrderItemSerializer,
     UserSerializer,
+    TableSerializer,
 )
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 
 
-@api_view(["GET"])
-def ads(request):
-    aditems = Advertisement.objects.all()
-    ad_serializer = AdvertisementSerializer(aditems, many=True)
-    return Response(ad_serializer.data)
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        token, created = Token.objects.get_or_create(user=user)
+        return Response(
+            {
+                "token": token.key,
+                "username": user.username,
+                "user_type": user.user_type,
+            }
+        )
 
 
 @api_view(["GET"])
@@ -44,6 +57,12 @@ def categorylists(request):
     fooditems = FoodCategory.objects.all()
     food_serializer = FoodCategorySerializer(fooditems, many=True)
     return Response(food_serializer.data)
+
+@api_view(["GET"])
+def tablelists(request):
+    tables = Table.objects.all()
+    tables_serializer = TableSerializer(tables, many=True)
+    return Response(tables_serializer.data)
 
 
 @api_view(["GET"])

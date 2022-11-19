@@ -4,6 +4,18 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    PAYMENT_STATUS = (
+        ("Waiter", "Waiter"),
+        ("Admin", "Admin"),
+        ("Cashier", "Cashier"),
+    )
+    user_type = models.CharField(
+        max_length=500, choices=PAYMENT_STATUS, default="Waiter"
+    )
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -23,11 +35,10 @@ class FoodItem(models.Model):
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=500)
     thumbnail_image = models.FileField()
-    small_note = models.TextField()
-    no_of_servings_per_plate = models.CharField(max_length=200)
     price = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -37,7 +48,7 @@ class OrderItem(models.Model):
     food_item = models.ForeignKey(
         FoodItem, on_delete=models.CASCADE, blank=True, null=True
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     no_of_items = models.CharField(max_length=10, default=1)
     cart_status = models.CharField(max_length=500, default="Ordered")
 
@@ -51,31 +62,27 @@ class OrderItem(models.Model):
 
 
 class Order(models.Model):
+    ORDER_STATUS = (
+        ("Order Placed", "Order Placed"),
+        ("Order Delivered", "Order Delivered"),
+    )
+
     PAYMENT_STATUS = (
-        ("Verifying", "Verifying"),
         ("Paid", "Paid"),
         ("Unpaid", "Unpaid"),
     )
 
-    PAYMENT_METHOD = (
-        ("Manually Paid", "Manually Paid"),
-        ("Esewa", "Esewa"),
-        ("Mobile Banking", "Mobile Banking"),
-        ("Paypal", "Paypal"),
-        ("Others", "Others"),
-    )
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order_note = models.TextField()
     orderitems = models.ManyToManyField(OrderItem)
-    status = models.CharField(max_length=400, default="Order Placed")
+    status = models.CharField(
+        max_length=400, choices=ORDER_STATUS, default="Order Placed"
+    )
     orderdate = models.DateTimeField(auto_now_add=True, verbose_name="created")
     payment_status = models.CharField(
         max_length=500, choices=PAYMENT_STATUS, default="Unpaid"
     )
-    payment_method = models.CharField(
-        max_length=500, choices=PAYMENT_METHOD, default="Manually Paid"
-    )
+    payment_method = models.CharField(max_length=500)
 
     def ordertotal(self):
         total = 0
@@ -87,8 +94,24 @@ class Order(models.Model):
         return self.user.username + " Ordered " + self.status
 
 
-class Advertisement(models.Model):
-    ad = models.FileField()
+class Vat(models.Model):
+    vat_name = models.CharField(max_length=400)
+    vat_percentage = models.IntegerField()
 
     def __str__(self):
-        return self.ad.url
+        return self.vat_name
+
+
+class Tax(models.Model):
+    tax_name = models.CharField(max_length=400)
+    tax_percentage = models.IntegerField()
+
+    def __str__(self):
+        return self.tax_name
+
+
+class Table(models.Model):
+    table_name = models.CharField(max_length=400)
+
+    def __str__(self):
+        return self.table_name
