@@ -6,21 +6,39 @@
 
 ###
 
-1. https://grabeatnp.herokuapp.com/api/tablelists/
+2. https://grabeatnp.herokuapp.com/api/tablelists/
    Output : List of all tables
 
 ###
 
-1. https://grabeatnp.herokuapp.com/api/categorylists/
+3. https://grabeatnp.herokuapp.com/api/categorylists/
    Output : List of all food categories
 
 ###
 
-1. https://grabeatnp.herokuapp.com/api/foodlists/
+4. https://grabeatnp.herokuapp.com/api/foodlists/
    Output : List of all fooditems
 
 ###
 
-1. https://grabeatnp.herokuapp.com/api/foodlists_search/
+5. https://grabeatnp.herokuapp.com/api/foodlists_search/
    Input : category and sorting [By price ascending or descending]
    Output : List of all fooditems
+
+### Table Management
+
+6. https://grabeatnp.herokuapp.com/api/add-table/
+   Input : Table Name
+   Output : Success or error message
+
+###
+
+7. https://grabeatnp.herokuapp.com/api/update-table/
+   Input : Table Id
+   Output : Success or error message
+
+###
+
+8. https://grabeatnp.herokuapp.com/api/delete-table/
+   Input : Table Id
+   Output : Success or error message

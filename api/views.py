@@ -12,7 +12,7 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes,
 )
-from .models import FoodItem, FoodCategory, Order, OrderItem,Table
+from .models import FoodItem, FoodCategory, Order, OrderItem, Table
 from .serializers import (
     FoodCategorySerializer,
     FoodItemSerializer,
@@ -57,6 +57,7 @@ def categorylists(request):
     fooditems = FoodCategory.objects.all()
     food_serializer = FoodCategorySerializer(fooditems, many=True)
     return Response(food_serializer.data)
+
 
 @api_view(["GET"])
 def tablelists(request):
@@ -147,3 +148,61 @@ def foodlists_search(request):
 
         foodser = FoodItemSerializer(foods, many=True)
         return Response(foodser.data)
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def addTable(request):
+    try:
+        datas = JSONParser().parse(request)
+        table = Table.objects.create(table_name=datas["table_name"])
+        table.save()
+
+        return JsonResponse(
+            {"success": "Table Created Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Table Addition Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updateTable(request):
+    try:
+        datas = JSONParser().parse(request)
+        table = Table.objects.get(table_name=datas["id"])
+        table.table_name = datas["table_name"]
+        table.save()
+
+        return JsonResponse(
+            {"success": "Table Updated Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Table Update Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def deleteTable(request):
+    try:
+        datas = JSONParser().parse(request)
+        table = Table.objects.get(table_name=datas["id"])
+        table.delete()
+
+        return JsonResponse(
+            {"success": "Table Delete Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Table Delete Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
