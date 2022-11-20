@@ -48,3 +48,15 @@
 9. https://grabeatnp.herokuapp.com/api/delete-table/
    Input : Table Id
    Output : Success or error message
+
+path("/api/vat-and-tax/", vatandtaxlists),
+path("/api/vats/", vatlists),
+path("/api/taxes/", taxlists),
+path("/api/add-vat/", addVat),
+path("/api/vat-single/<int:id>/", singleVat),
+path("/api/update-vat/", updateVat),
+path("/api/delete-vat/", deleteVat),
+path("/api/add-tax/", addTax),
+path("/api/tax-single/<int:id>/", singleTax),
+path("/api/update-tax/", updateTax),
+path("/api/delete-tax/", deleteTax),
