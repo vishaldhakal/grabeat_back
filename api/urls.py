@@ -49,5 +49,6 @@ urlpatterns = [
     path("update-tax/", updateTax),
     path("delete-tax/", deleteTax),
     path("inventory/", include("inventory.urls")),
+    path("payment/", include("payments.urls")),
     path("api-token-auth/", CustomAuthToken.as_view(), name="api_token_auth"),
 ]
