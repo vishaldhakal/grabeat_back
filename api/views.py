@@ -12,7 +12,7 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes,
 )
-from .models import FoodItem, FoodCategory, Order, OrderItem, Table
+from .models import FoodItem, FoodCategory, Order, OrderItem, Table, Vat, Tax
 from .serializers import (
     FoodCategorySerializer,
     FoodItemSerializer,
@@ -20,6 +20,8 @@ from .serializers import (
     OrderItemSerializer,
     UserSerializer,
     TableSerializer,
+    VatSerializer,
+    TaxSerializer,
 )
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -218,4 +220,175 @@ def deleteTable(request):
     except:
         return JsonResponse(
             {"error": "Table Delete Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["GET"])
+def vatandtaxlists(request):
+    vats = Vat.objects.all()
+    taxes = Tax.objects.all()
+    vats_serializer = VatSerializer(vats, many=True)
+    taxess_serializer = TaxSerializer(taxes, many=True)
+    return Response({"vats": vats_serializer.data, "taxes": taxess_serializer.data})
+
+
+@api_view(["GET"])
+def vatlists(request):
+    vats = Vat.objects.all()
+    vats_serializer = VatSerializer(vats, many=True)
+    return Response(vats_serializer.data)
+
+
+@api_view(["GET"])
+def taxlists(request):
+    taxes = Tax.objects.all()
+    taxess_serializer = TaxSerializer(taxes, many=True)
+    return Response(taxess_serializer.data)
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def addVat(request):
+    try:
+        datas = JSONParser().parse(request)
+        vat = Vat.objects.create(
+            vat_name=datas["vat_name"], vat_percentage=datas["vat_percentage"]
+        )
+        vat.save()
+
+        return JsonResponse(
+            {"success": "Vat Created Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Vat Addition Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def singleVat(request, id):
+    try:
+        vat = Vat.objects.get(id=id)
+        vat_serializer = VatSerializer(vat)
+        return Response(vat_serializer.data)
+    except:
+        return JsonResponse(
+            {"error": "Invalid Vat"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updateVat(request):
+    try:
+        datas = JSONParser().parse(request)
+        vat = Vat.objects.get(id=datas["id"])
+        vat.vat_name = datas["vat_name"]
+        vat.vat_percentage = datas["vat_percentage"]
+        vat.save()
+        return JsonResponse(
+            {"success": "Vat Updated Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Vat Update Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def deleteVat(request):
+    try:
+        datas = JSONParser().parse(request)
+        vat = Vat.objects.get(id=datas["id"])
+        vat.delete()
+
+        return JsonResponse(
+            {"success": "Vat Delete Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Vat Delete Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def addTax(request):
+    try:
+        datas = JSONParser().parse(request)
+        tax = Tax.objects.create(
+            tax_name=datas["tax_name"], tax_percentage=datas["tax_percentage"]
+        )
+        tax.save()
+
+        return JsonResponse(
+            {"success": "Tax Created Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Tax Addition Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def singleTax(request, id):
+    try:
+        tax = Tax.objects.get(id=id)
+        tax_serializer = TaxSerializer(tax)
+        return Response(tax_serializer.data)
+    except:
+        return JsonResponse(
+            {"error": "Invalid Tax"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updateTax(request):
+    try:
+        datas = JSONParser().parse(request)
+        tax = Tax.objects.get(id=datas["id"])
+        tax.tax_name = datas["tax_name"]
+        tax.tax_percentage = datas["tax_percentage"]
+        tax.save()
+        return JsonResponse(
+            {"success": "Tax Updated Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Tax Update Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def deleteTax(request):
+    try:
+        datas = JSONParser().parse(request)
+        tax = Tax.objects.get(id=datas["id"])
+        tax.delete()
+
+        return JsonResponse(
+            {"success": "Tax Delete Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Tax Delete Failed"}, status=status.HTTP_400_BAD_REQUEST
         )

@@ -9,6 +9,20 @@ class TableSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class VatSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = models.Vat
+        depth = 1
+
+
+class TaxSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = models.Tax
+        depth = 1
+
+
 class FoodCategorySerializer(serializers.ModelSerializer):
     class Meta:
         fields = "__all__"
