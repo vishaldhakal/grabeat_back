@@ -51,14 +51,18 @@ class CustomAuthToken(ObtainAuthToken):
 def foodlists(request):
     fooditems = FoodItem.objects.all()
     food_serializer = FoodItemSerializer(fooditems, many=True)
-    return Response(food_serializer.data)
+    categoryitems = FoodCategory.objects.all()
+    categoryitems_serializer = FoodCategorySerializer(categoryitems, many=True)
+    return Response(
+        {"menu": food_serializer.data, "categories": categoryitems_serializer.data}
+    )
 
 
 @api_view(["GET"])
 def categorylists(request):
-    fooditems = FoodCategory.objects.all()
-    food_serializer = FoodCategorySerializer(fooditems, many=True)
-    return Response(food_serializer.data)
+    categoryitems = FoodCategory.objects.all()
+    categoryitems_serializer = FoodCategorySerializer(categoryitems, many=True)
+    return Response(categoryitems_serializer.data)
 
 
 @api_view(["GET"])
