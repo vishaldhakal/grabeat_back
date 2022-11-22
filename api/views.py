@@ -202,8 +202,8 @@ def submitcart(request):
             )
             if foodi.is_a_drink:
                 drinkkk = DrinkItem.objects.get(name=foodi.name)
-                newobj.drink_quantity = data["drink_quantity"]
-                newobj.save()
+                """ newobj.drink_quantity = data["drink_quantity"]
+                newobj.save() """
                 try:
                     dp = DrinksPurchase.objects.get(drinkk=drinkkk)
                     dp.quantity -= int(data["drink_quantity"])
