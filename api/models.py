@@ -8,6 +8,15 @@ from django.contrib.auth.models import AbstractUser
 from payments.models import PaymentMethod, Bank
 
 
+class Table(models.Model):
+    table_name = models.CharField(max_length=400)
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
+
+    def __str__(self):
+        return self.table_name
+
+
 class User(AbstractUser):
     PAYMENT_STATUS = (
         ("Waiter", "Waiter"),
@@ -72,6 +81,7 @@ class Order(models.Model):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order_note = models.TextField()
+    table = models.ForeignKey(Table, on_delete=models.CASCADE)
     orderitems = models.ManyToManyField(OrderItem)
     status = models.CharField(
         max_length=400, choices=ORDER_STATUS, default="Order Placed"
@@ -104,6 +114,7 @@ class Payment(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     cancle_reason = models.TextField(blank=True)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE)
 
     def paymenttotal(self):
         total = 0
@@ -133,12 +144,3 @@ class Tax(models.Model):
 
     def __str__(self):
         return self.tax_name
-
-
-class Table(models.Model):
-    table_name = models.CharField(max_length=400)
-    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
-    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
-
-    def __str__(self):
-        return self.table_name
