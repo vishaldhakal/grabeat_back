@@ -9,6 +9,7 @@ from .models import (
     Tax,
     Vat,
     DrinkItem,
+    Payment,
 )
 
 admin.site.register(FoodCategory)
@@ -18,6 +19,7 @@ admin.site.register(User)
 admin.site.register(Table)
 admin.site.register(Tax)
 admin.site.register(Vat)
+admin.site.register(Payment)
 """ admin.site.register(DrinkItem) """
 
 

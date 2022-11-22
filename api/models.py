@@ -133,7 +133,9 @@ class Payment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order = models.ManyToManyField(Order)
     status = models.CharField(max_length=400, choices=PAYMENT_STATUS, default="Unpaid")
-    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
+    payment_method = models.ForeignKey(
+        PaymentMethod, on_delete=models.CASCADE, blank=True
+    )
     bank_name = models.ForeignKey(Bank, on_delete=models.CASCADE, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")

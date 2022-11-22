@@ -145,6 +145,26 @@ def cancleorder(request, id):
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
+def cancleapyment(request, id):
+    datas = JSONParser().parse(request)
+    tablee = Table.objects.get(id=int(id))
+    ordee = Order.objects.filter(table=tablee)
+    for ord in ordee:
+        ord.status = "Order Cancled"
+        ord.save()
+    payme = Payment.objects.create(order=ordee, status="Unpaid", table=tablee)
+    if datas:
+        payme.cancle_reason = datas["cancle_reason"]
+    payme.save()
+    return JsonResponse(
+        {"success": "Payment Cancled Successfull"},
+        status=status.HTTP_201_CREATED,
+    )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def submitcart(request):
     try:
         datas = JSONParser().parse(request)
