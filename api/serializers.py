@@ -2,6 +2,13 @@ from rest_framework import serializers
 from . import models
 
 
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = models.Payment
+        depth = 1
+
+
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
         fields = "__all__"

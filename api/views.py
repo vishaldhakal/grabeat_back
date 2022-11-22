@@ -33,6 +33,7 @@ from .serializers import (
     TableSerializer,
     VatSerializer,
     TaxSerializer,
+    PaymentSerializer,
 )
 from inventory.models import DrinksPurchase
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -91,10 +92,31 @@ def orderslists(request):
     userr = User.objects.get(id=request.user.id)
     orders = Order.objects.filter(status="Order Placed")
     ordersserializer = OrderSerializer(orders, many=True)
-    subtotal = 0
+    subtotal = []
     for order in orders:
-        subtotal += order.ordertotal()
+        subtotal.append(order.ordertotal())
     return Response({"orderdata": ordersserializer.data, "subtotal": subtotal})
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def orderslists_report(request):
+    orders = Order.objects.filter(status="Order Paid")
+    ordersserializer = OrderSerializer(orders, many=True)
+    subtotal = []
+    for order in orders:
+        subtotal.append(order.ordertotal())
+    return Response({"orderdata": ordersserializer.data, "subtotal": subtotal})
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def paymentlists_report(request):
+    orders = Payment.objects.filter(status="Paid")
+    ordersserializer = PaymentSerializer(orders, many=True)
+    return Response(ordersserializer.data)
 
 
 @api_view(["GET"])

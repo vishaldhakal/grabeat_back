@@ -26,10 +26,14 @@ from .views import (
     cancleapyment,
     cancleorder,
     paymentorderlists,
+    paymentlists_report,
+    orderslists_report,
     CustomAuthToken,
 )
 
 urlpatterns = [
+    path("order-report/", orderslists_report),
+    path("payment-report/", paymentlists_report),
     path("foodlists/", foodlists),
     path("foodlists_search/", foodlists_search),
     path("categorylists/", categorylists),
