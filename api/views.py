@@ -192,7 +192,9 @@ def submitcart(request):
         datas = JSONParser().parse(request)
         userr = User.objects.get(id=request.user.id)
         tabb = Table.objects.get(table_name=datas["table"])
-        ordee = Order.objects.create(user=userr, order_note="No Order note", table=tabb)
+        ordee = Order.objects.create(
+            user=userr, order_note=datas["ordernote"], table=tabb
+        )
         for data in datas["cartt"]:
             foodi = FoodItem.objects.get(id=data["item"]["id"])
             newobj = OrderItem.objects.create(
@@ -207,10 +209,7 @@ def submitcart(request):
                     dp.quantity -= int(data["drink_quantity"])
                     dp.save()
                 except:
-                    return JsonResponse(
-                        {"error": "Drink Stock not available"},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
+                    pass
 
             ordee.orderitems.add(newobj)
 
