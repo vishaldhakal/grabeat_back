@@ -5,14 +5,25 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib import auth
 from rest_framework import status
 from rest_framework.response import Response
-from django.contrib.auth.models import User
+from api.models import User
 from django.http.response import JsonResponse
 from rest_framework.decorators import (
     api_view,
     authentication_classes,
     permission_classes,
 )
-from .models import FoodItem, FoodCategory, Order, OrderItem, Table, Vat, Tax
+from payments.models import PaymentMethod
+from .models import (
+    FoodItem,
+    FoodCategory,
+    Order,
+    OrderItem,
+    Table,
+    Vat,
+    Tax,
+    DrinkItem,
+    Payment,
+)
 from .serializers import (
     FoodCategorySerializer,
     FoodItemSerializer,
@@ -23,6 +34,7 @@ from .serializers import (
     VatSerializer,
     TaxSerializer,
 )
+from inventory.models import DrinksPurchase
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -77,12 +89,57 @@ def tablelists(request):
 @permission_classes([IsAuthenticated])
 def orderslists(request):
     userr = User.objects.get(id=request.user.id)
-    orders = Order.objects.filter(user=userr)
+    orders = Order.objects.filter(status="Order Placed")
     ordersserializer = OrderSerializer(orders, many=True)
     subtotal = 0
     for order in orders:
         subtotal += order.ordertotal()
     return Response({"orderdata": ordersserializer.data, "subtotal": subtotal})
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def paymentorderlists(request):
+    okayy = []
+    userr = User.objects.get(id=request.user.id)
+    tabless = Table.objects.all()
+    for table in tabless:
+        ordee = Order.objects.filter(status="Order Completed", table=table)
+        if ordee:
+            okayy += ordee
+
+    ordersserializer = OrderSerializer(okayy, many=True)
+    return Response({ordersserializer.data})
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def completeorder(request, id):
+    orders = Order.objects.get(id=int(id))
+    orders.status = "Order Completed"
+    orders.save()
+    return JsonResponse(
+        {"success": "Order Completion Successfull"},
+        status=status.HTTP_201_CREATED,
+    )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def cancleorder(request, id):
+    datas = JSONParser().parse(request)
+    orders = Order.objects.get(id=int(id))
+    orders.status = "Order Cancled"
+    if datas:
+        orders.cancle_reason = datas["cancle_reason"]
+    orders.save()
+    return JsonResponse(
+        {"success": "Order Cancled Successfull"},
+        status=status.HTTP_201_CREATED,
+    )
 
 
 @api_view(["POST"])
@@ -92,12 +149,27 @@ def submitcart(request):
     try:
         datas = JSONParser().parse(request)
         userr = User.objects.get(id=request.user.id)
-        ordee = Order.objects.create(user=userr, order_note="No Order note")
-        for data in datas:
+        tabb = Table.objects.get(table_name=datas["table"])
+        ordee = Order.objects.create(user=userr, order_note="No Order note", table=tabb)
+        for data in datas["cartt"]:
             foodi = FoodItem.objects.get(id=data["item"]["id"])
             newobj = OrderItem.objects.create(
                 user=userr, food_item=foodi, no_of_items=data["qty"]
             )
+            if foodi.is_a_drink:
+                drinkkk = DrinkItem.objects.get(name=foodi.name)
+                newobj.drink_quantity = data["drink_quantity"]
+                newobj.save()
+                try:
+                    dp = DrinksPurchase.objects.get(drinkk=drinkkk)
+                    dp.quantity -= int(data["drink_quantity"])
+                    dp.save()
+                except:
+                    return JsonResponse(
+                        {"error": "Drink Stock not available"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
             ordee.orderitems.add(newobj)
 
         ordee.save()
@@ -118,11 +190,20 @@ def paymentt(request):
     try:
         datas = JSONParser().parse(request)
         userr = User.objects.get(id=request.user.id)
-        ordee = Order.objects.filter(payment_status="Unpaid")
-        for data in ordee:
-            data.payment_method = datas["paymentmethod"]
-            data.payment_status = "Verifying"
-            data.save()
+        tablee = Table.objects.get(table_name=datas["table_name"])
+        paymentmethod = PaymentMethod.objects.get(
+            payment_method_name=datas["payment_method"]
+        )
+        ordee = Order.objects.filter(table=tablee)
+        for ord in ordee:
+            ord.status = "Order Paid"
+            ord.save()
+        payme = Payment.objects.create(
+            order=ordee, payment_method=paymentmethod, status="Paid", table=tablee
+        )
+        if paymentmethod.payment_method_name == "Card":
+            payme.bank_name = datas["bank_name"]
+        payme.save()
 
         return JsonResponse(
             {"success": "Payment Submission Successfull"},

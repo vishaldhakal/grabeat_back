@@ -1,5 +1,5 @@
 from django.db import models
-from api.models import FoodItem
+from api.models import DrinkItem
 
 
 class Supplier(models.Model):
@@ -44,12 +44,13 @@ class Stockout(models.Model):
 
 
 class DrinksPurchase(models.Model):
+    METRICES = (("Ml", "Ml"),)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-    drinkk = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
+    drinkk = models.ForeignKey(DrinkItem, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     payment_type = models.CharField(max_length=500, default="Cash")
     quantity = models.IntegerField()
-    metric = models.CharField(max_length=100)
+    metric = models.CharField(max_length=100, choices=METRICES, default="Ml")
     price = models.IntegerField()
     purchase_bill = models.FileField(blank=True)
     remarks = models.TextField(blank=True)

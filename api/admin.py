@@ -1,5 +1,15 @@
 from django.contrib import admin
-from .models import FoodCategory, FoodItem, OrderItem, Order, User, Table, Tax, Vat
+from .models import (
+    FoodCategory,
+    FoodItem,
+    OrderItem,
+    Order,
+    User,
+    Table,
+    Tax,
+    Vat,
+    DrinkItem,
+)
 
 admin.site.register(FoodCategory)
 admin.site.register(OrderItem)
@@ -8,6 +18,7 @@ admin.site.register(User)
 admin.site.register(Table)
 admin.site.register(Tax)
 admin.site.register(Vat)
+""" admin.site.register(DrinkItem) """
 
 
 @admin.register(FoodItem)

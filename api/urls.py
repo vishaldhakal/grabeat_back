@@ -22,6 +22,9 @@ from .views import (
     updateVat,
     deleteVat,
     singleVat,
+    completeorder,
+    cancleorder,
+    paymentorderlists,
     CustomAuthToken,
 )
 
@@ -30,7 +33,10 @@ urlpatterns = [
     path("foodlists_search/", foodlists_search),
     path("categorylists/", categorylists),
     path("orderslists/", orderslists),
+    path("paymentorderlists/", paymentorderlists),
     path("submitcart/", submitcart),
+    path("complete-order/<int:id>/", completeorder),
+    path("cancle-order/<int:id>/", cancleorder),
     path("payorders/", paymentt),
     path("tablelists/", tablelists),
     path("add-table/", addTable),
