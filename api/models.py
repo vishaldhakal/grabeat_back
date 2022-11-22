@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from payments.models import PaymentMethod, Bank
 
 
 class User(AbstractUser):
@@ -32,7 +33,7 @@ class FoodCategory(models.Model):
 
 
 class FoodItem(models.Model):
-    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
+    category = models.ManyToManyField(FoodCategory)
     name = models.CharField(max_length=500)
     thumbnail_image = models.FileField()
     price = models.IntegerField()
@@ -50,6 +51,8 @@ class OrderItem(models.Model):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     no_of_items = models.CharField(max_length=10, default=1)
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     cart_status = models.CharField(max_length=500, default="Ordered")
 
     def __str__(self):
@@ -64,25 +67,18 @@ class OrderItem(models.Model):
 class Order(models.Model):
     ORDER_STATUS = (
         ("Order Placed", "Order Placed"),
-        ("Order Delivered", "Order Delivered"),
+        ("Order Completed", "Order Completed"),
+        ("Order Cancled", "Order Cancled"),
     )
-
-    PAYMENT_STATUS = (
-        ("Paid", "Paid"),
-        ("Unpaid", "Unpaid"),
-    )
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order_note = models.TextField()
     orderitems = models.ManyToManyField(OrderItem)
     status = models.CharField(
         max_length=400, choices=ORDER_STATUS, default="Order Placed"
     )
-    orderdate = models.DateTimeField(auto_now_add=True, verbose_name="created")
-    payment_status = models.CharField(
-        max_length=500, choices=PAYMENT_STATUS, default="Unpaid"
-    )
-    payment_method = models.CharField(max_length=500)
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
+    cancle_reason = models.TextField(blank=True)
 
     def ordertotal(self):
         total = 0
@@ -94,9 +90,36 @@ class Order(models.Model):
         return self.user.username + " Ordered " + self.status
 
 
+class Payment(models.Model):
+    PAYMENT_STATUS = (
+        ("Unpaid", "Unpaid"),
+        ("Paid", "Paid"),
+        ("Payment Cancled", "Payment Cancled"),
+    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    status = models.CharField(max_length=400, choices=PAYMENT_STATUS, default="Unpaid")
+    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
+    bank_name = models.ForeignKey(Bank, on_delete=models.CASCADE, blank=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
+    cancle_reason = models.TextField(blank=True)
+
+    def paymenttotal(self):
+        total = 0
+        for orderitemm in self.order.orderitems.all():
+            total += orderitemm.totp()
+        return total
+
+    def __str__(self):
+        return self.user.username + " Ordered "
+
+
 class Vat(models.Model):
     vat_name = models.CharField(max_length=400)
     vat_percentage = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
 
     def __str__(self):
         return self.vat_name
@@ -105,6 +128,8 @@ class Vat(models.Model):
 class Tax(models.Model):
     tax_name = models.CharField(max_length=400)
     tax_percentage = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
 
     def __str__(self):
         return self.tax_name
@@ -112,6 +137,8 @@ class Tax(models.Model):
 
 class Table(models.Model):
     table_name = models.CharField(max_length=400)
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
 
     def __str__(self):
         return self.table_name

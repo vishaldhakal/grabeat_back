@@ -1,4 +1,5 @@
 from django.db import models
+from api.models import FoodItem
 
 
 class Supplier(models.Model):
@@ -40,3 +41,18 @@ class Stockout(models.Model):
 
     def __str__(self):
         return self.ingredient.ingredient_name
+
+
+class DrinksPurchase(models.Model):
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    drinkk = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    payment_type = models.CharField(max_length=500, default="Cash")
+    quantity = models.IntegerField()
+    metric = models.CharField(max_length=100)
+    price = models.IntegerField()
+    purchase_bill = models.FileField(blank=True)
+    remarks = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.drinkk
