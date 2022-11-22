@@ -1,0 +1,22 @@
+"workbench.colorCustomizations": {
+    "foreground": "#ffffff",
+    "activityBar.background": "#203531",
+    "sideBar.background": "#203531",
+    "editor.background": "#203531",
+    "editor.foreground": "#ffffff",
+    "terminal.foreground": "#ffffff",
+    "sideBar.border": "#00ffb7",
+    "activityBar.activeBorder": "#00ffb7",
+    "sideBarSectionHeader.background": "#203531",
+    "panel.border": "#00ffb7",
+    "sideBarSectionHeader.foreground": "#ffffff"
+  },
+  "editor.tokenColorCustomizations": {
+    "[Monokai]": {
+      "comments": "#00ffb7",
+      "functions": "#ffffff",
+      "keywords": "#00ccff",
+      "numbers": "#ff7300",
+      "strings": "#00ffb7"
+    }
+  },
