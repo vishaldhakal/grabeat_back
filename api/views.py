@@ -12,8 +12,8 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes,
 )
-from payments.models import PaymentMethod,Bank
-from payments.serializers import PaymentMethodSerializer,BankSerializer
+from payments.models import PaymentMethod, Bank
+from payments.serializers import PaymentMethodSerializer, BankSerializer
 from .models import (
     FoodItem,
     FoodCategory,
@@ -42,6 +42,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 import json
+
 
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -136,11 +137,11 @@ def paymentorderlists(request):
 
     return Response(okayy)
 
+
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def paymentorderlistsingle(request,id):
-    userr = User.objects.get(id=request.user.id)
+def paymentorderlistsingle(request, id):
     tabless = Table.objects.get(id=id)
     ordee = Order.objects.filter(status="Order Completed", table=tabless)
     ordersserializer = OrderSerializer(ordee, many=True)
@@ -148,7 +149,13 @@ def paymentorderlistsingle(request,id):
     banksserializer = BankSerializer(bankss, many=True)
     pm = PaymentMethod.objects.all()
     pmserializer = PaymentMethodSerializer(pm, many=True)
-    return Response({"order":ordersserializer.data,"banks":banksserializer.data,"payment_methods":pmserializer.data})
+    return Response(
+        {
+            "order": ordersserializer.data,
+            "banks": banksserializer.data,
+            "payment_methods": pmserializer.data,
+        }
+    )
 
 
 @api_view(["POST"])
