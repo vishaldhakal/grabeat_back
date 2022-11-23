@@ -242,13 +242,18 @@ def paymentt(request):
             discount_type=datas["discount_type"],
             discount=datas["discount_value"],
             discount_percentage=datas["discount_percentage"],
+            amount_paidd=datas["amount_paid"],
         )
         ordee = Order.objects.filter(table=tablee)
         for ord in ordee:
             ord.status = "Order Paid"
             ord.save()
         payme = Payment.objects.create(
-            user=userr,order=ordee, payment_method=paymentmethod, status="Paid", table=tablee
+            user=userr,
+            order=ordee,
+            payment_method=paymentmethod,
+            status="Paid",
+            table=tablee,
         )
         if paymentmethod.payment_method_name == "Card":
             payme.bank_name = datas["bank_name"]
