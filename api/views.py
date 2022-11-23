@@ -39,6 +39,7 @@ from inventory.models import DrinksPurchase
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+import json
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -129,10 +130,10 @@ def paymentorderlists(request):
     for table in tabless:
         ordee = Order.objects.filter(status="Order Completed", table=table)
         if ordee:
-            okayy += ordee
+            ordersserializer = OrderSerializer(ordee, many=True)
+            okayy.append(ordersserializer.data)
 
-    ordersserializer = OrderSerializer(okayy, many=True)
-    return Response({ordersserializer.data})
+    return Response(okayy)
 
 
 @api_view(["POST"])
@@ -154,12 +155,12 @@ def completeorder(request, id):
 def cancleorder(request, id):
     datas = JSONParser().parse(request)
     orders = Order.objects.get(id=int(id))
-    orders.status = "Order Cancled"
+    orders.status = "Order Canceled"
     if datas:
         orders.cancle_reason = datas["cancel_reason"]
     orders.save()
     return JsonResponse(
-        {"success": "Order Cancled Successfull"},
+        {"success": "Order Canceled Successfull"},
         status=status.HTTP_201_CREATED,
     )
 
@@ -172,14 +173,14 @@ def cancleapyment(request, id):
     tablee = Table.objects.get(id=int(id))
     ordee = Order.objects.filter(table=tablee)
     for ord in ordee:
-        ord.status = "Order Cancled"
+        ord.status = "Order Canceled"
         ord.save()
     payme = Payment.objects.create(order=ordee, status="Unpaid", table=tablee)
     if datas:
         payme.cancle_reason = datas["cancle_reason"]
     payme.save()
     return JsonResponse(
-        {"success": "Payment Cancled Successfull"},
+        {"success": "Payment Canceled Successfull"},
         status=status.HTTP_201_CREATED,
     )
 
