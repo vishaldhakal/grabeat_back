@@ -170,12 +170,13 @@ def cancleorder(request, id):
 @permission_classes([IsAuthenticated])
 def cancleapyment(request, id):
     datas = JSONParser().parse(request)
-    tablee = Table.objects.get(id=int(id))
+    tablee = Table.objects.get(id=id)
     ordee = Order.objects.filter(table=tablee)
     for ord in ordee:
         ord.status = "Order Canceled"
         ord.save()
-    payme = Payment.objects.create(order=ordee, status="Unpaid", table=tablee)
+    payme = Payment.objects.create(status="Unpaid", table=tablee)
+    payme.order.set(ordee)
     if datas:
         payme.cancle_reason = datas["cancel_reason"]
     payme.save()
