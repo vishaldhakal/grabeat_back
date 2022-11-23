@@ -153,6 +153,31 @@ class Payment(models.Model):
         return self.user.username + " Ordered "
 
 
+class CanclePayment(models.Model):
+    PAYMENT_STATUS = (
+        ("Unpaid", "Unpaid"),
+        ("Paid", "Paid"),
+        ("Payment Canceled", "Payment Canceled"),
+    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    order = models.ManyToManyField(Order)
+    status = models.CharField(max_length=400, choices=PAYMENT_STATUS, default="Unpaid")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
+    cancle_reason = models.TextField(blank=True)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE)
+
+    def paymenttotal(self):
+        total = 0
+        for orderitemm in self.order.all():
+            for orderitemmm in orderitemm:
+                total += orderitemmm.totp()
+        return total
+
+    def __str__(self):
+        return self.user.username + " Ordered "
+
+
 class Vat(models.Model):
     vat_name = models.CharField(max_length=400)
     vat_percentage = models.IntegerField()

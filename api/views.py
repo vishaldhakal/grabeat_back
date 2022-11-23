@@ -23,6 +23,7 @@ from .models import (
     Tax,
     DrinkItem,
     Payment,
+    CanclePayment,
 )
 from .serializers import (
     FoodCategorySerializer,
@@ -171,11 +172,13 @@ def cancleorder(request, id):
 def cancleapyment(request, id):
     datas = JSONParser().parse(request)
     tablee = Table.objects.get(id=id)
+    iddd = request.user.id
+    usss = User.objects.get(id=iddd)
     ordee = Order.objects.filter(table=tablee)
     for ord in ordee:
         ord.status = "Order Canceled"
         ord.save()
-    payme = Payment.objects.create(status="Unpaid", table=tablee)
+    payme = CanclePayment.objects.create(user=usss, status="Unpaid", table=tablee)
     payme.order.set(ordee)
     if datas:
         payme.cancle_reason = datas["cancel_reason"]
