@@ -248,7 +248,7 @@ def paymentt(request):
             ord.status = "Order Paid"
             ord.save()
         payme = Payment.objects.create(
-            order=ordee, payment_method=paymentmethod, status="Paid", table=tablee
+            user=userr,order=ordee, payment_method=paymentmethod, status="Paid", table=tablee
         )
         if paymentmethod.payment_method_name == "Card":
             payme.bank_name = datas["bank_name"]
