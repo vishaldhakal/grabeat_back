@@ -258,7 +258,8 @@ def submitcart(request):
 def paymentt(request):
     try:
         datas = JSONParser().parse(request)
-        userr = User.objects.get(id=request.user.id)
+        idd = request.user.id
+        userr = User.objects.get(id=idd)
         tablee = Table.objects.get(table_name=datas["table_name"])
         paymentmethod = PaymentMethod.objects.get(
             payment_method_name=datas["payment_method"]
@@ -269,7 +270,6 @@ def paymentt(request):
             ord.save()
         payme = Payment.objects.create(
             user=userr,
-            order=ordee,
             payment_method=paymentmethod,
             status="Paid",
             table=tablee,
@@ -278,6 +278,7 @@ def paymentt(request):
             discount_percentage=datas["discount_percentage"],
             amount_paidd=datas["amount_paid"],
         )
+        payme.set.order(ordee)
         if paymentmethod.payment_method_name == "Card":
             payme.bank_name = datas["bank_name"]
         payme.save()
