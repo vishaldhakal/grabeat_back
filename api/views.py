@@ -197,9 +197,14 @@ def submitcart(request):
         datas = JSONParser().parse(request)
         userr = User.objects.get(id=request.user.id)
         tabb = Table.objects.get(table_name=datas["table"])
-        ordee = Order.objects.create(
-            user=userr, order_note=datas["ordernote"], table=tabb
-        )
+        if datas["ordernote"]:
+            ordee = Order.objects.create(
+                user=userr, order_note=datas["ordernote"], table=tabb
+            )
+        else:
+            ordee = Order.objects.create(
+                user=userr, order_note="No order note", table=tabb
+            )
         for data in datas["cartt"]:
             foodi = FoodItem.objects.get(id=data["item"]["id"])
             newobj = OrderItem.objects.create(
@@ -215,7 +220,6 @@ def submitcart(request):
                     dp.save()
                 except:
                     pass
-
             ordee.orderitems.add(newobj)
 
         ordee.save()
