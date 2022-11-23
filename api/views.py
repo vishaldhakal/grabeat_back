@@ -139,8 +139,6 @@ def paymentorderlists(request):
 
 
 @api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def paymentorderlistsingle(request, id):
     tabless = Table.objects.get(id=id)
     ordee = Order.objects.filter(status="Order Completed", table=tabless)
