@@ -56,4 +56,4 @@ class DrinksPurchase(models.Model):
     remarks = models.TextField(blank=True)
 
     def __str__(self):
-        return self.drinkk
+        return self.drinkk.name
