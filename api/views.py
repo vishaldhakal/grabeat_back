@@ -156,7 +156,7 @@ def cancleorder(request, id):
     orders = Order.objects.get(id=int(id))
     orders.status = "Order Cancled"
     if datas:
-        orders.cancle_reason = datas["cancle_reason"]
+        orders.cancle_reason = datas["cancel_reason"]
     orders.save()
     return JsonResponse(
         {"success": "Order Cancled Successfull"},

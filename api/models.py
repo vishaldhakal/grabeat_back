@@ -101,7 +101,7 @@ class Order(models.Model):
         ("Order Placed", "Order Placed"),
         ("Order Completed", "Order Completed"),
         ("Order Paid", "Order Paid"),
-        ("Order Cancled", "Order Cancled"),
+        ("Order Canceled", "Order Canceled"),
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order_note = models.TextField()
@@ -128,7 +128,7 @@ class Payment(models.Model):
     PAYMENT_STATUS = (
         ("Unpaid", "Unpaid"),
         ("Paid", "Paid"),
-        ("Payment Cancled", "Payment Cancled"),
+        ("Payment Canceled", "Payment Canceled"),
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order = models.ManyToManyField(Order)
