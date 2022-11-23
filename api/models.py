@@ -130,16 +130,23 @@ class Payment(models.Model):
         ("Paid", "Paid"),
         ("Payment Canceled", "Payment Canceled"),
     )
+    DISCOUNT_TYPE = (
+        ("Percentage", "Percentage"),
+        ("Number", "Number"),
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order = models.ManyToManyField(Order)
     status = models.CharField(max_length=400, choices=PAYMENT_STATUS, default="Unpaid")
+    discount_type = models.CharField(
+        max_length=400, choices=DISCOUNT_TYPE, default="Number"
+    )
+    discount = models.FloatField(default=0)
     payment_method = models.ForeignKey(
         PaymentMethod, on_delete=models.CASCADE, blank=True
     )
     bank_name = models.ForeignKey(Bank, on_delete=models.CASCADE, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
-    cancle_reason = models.TextField(blank=True)
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
 
     def paymenttotal(self):
@@ -161,7 +168,9 @@ class CanclePayment(models.Model):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order = models.ManyToManyField(Order)
-    status = models.CharField(max_length=400, choices=PAYMENT_STATUS, default="Unpaid")
+    status = models.CharField(
+        max_length=400, choices=PAYMENT_STATUS, default="Payment Canceled"
+    )
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     cancle_reason = models.TextField(blank=True)
