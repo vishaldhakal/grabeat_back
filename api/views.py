@@ -177,7 +177,7 @@ def cancleapyment(request, id):
         ord.save()
     payme = Payment.objects.create(order=ordee, status="Unpaid", table=tablee)
     if datas:
-        payme.cancle_reason = datas["cancle_reason"]
+        payme.cancle_reason = datas["cancel_reason"]
     payme.save()
     return JsonResponse(
         {"success": "Payment Canceled Successfull"},
