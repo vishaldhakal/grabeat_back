@@ -238,7 +238,10 @@ def paymentt(request):
         userr = User.objects.get(id=request.user.id)
         tablee = Table.objects.get(table_name=datas["table_name"])
         paymentmethod = PaymentMethod.objects.get(
-            payment_method_name=datas["payment_method"]
+            payment_method_name=datas["payment_method"],
+            discount_type=datas["discount_type"],
+            discount=datas["discount_value"],
+            discount_percentage=datas["discount_percentage"],
         )
         ordee = Order.objects.filter(table=tablee)
         for ord in ordee:

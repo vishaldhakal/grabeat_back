@@ -145,7 +145,7 @@ class Payment(models.Model):
     payment_method = models.ForeignKey(
         PaymentMethod, on_delete=models.CASCADE, blank=True
     )
-    bank_name = models.ForeignKey(Bank, on_delete=models.CASCADE, blank=True)
+    bank_name = models.CharField(max_length=500, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
