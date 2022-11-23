@@ -141,6 +141,7 @@ class Payment(models.Model):
         max_length=400, choices=DISCOUNT_TYPE, default="Number"
     )
     discount = models.FloatField(default=0)
+    discount_percentage = models.IntegerField(default=0)
     payment_method = models.ForeignKey(
         PaymentMethod, on_delete=models.CASCADE, blank=True
     )
