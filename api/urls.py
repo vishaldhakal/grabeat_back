@@ -42,7 +42,7 @@ urlpatterns = [
     path("submitcart/", submitcart),
     path("cancle-payment/<int:id>/", cancleapyment),
     path("complete-order/<int:id>/", completeorder),
-    path("cancle-order/<int:id>/", cancleorder),
+    path("cancel-order/<int:id>/", cancleorder),
     path("payorders/", paymentt),
     path("tablelists/", tablelists),
     path("add-table/", addTable),
