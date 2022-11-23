@@ -27,6 +27,7 @@ from .views import (
     cancleorder,
     paymentorderlists,
     paymentlists_report,
+    paymentorderlistsingle,
     orderslists_report,
     CustomAuthToken,
 )
@@ -43,6 +44,7 @@ urlpatterns = [
     path("cancel-payment/<int:id>/", cancleapyment),
     path("complete-order/<int:id>/", completeorder),
     path("cancel-order/<int:id>/", cancleorder),
+    path("payment-single/<int:id>/", paymentorderlistsingle),
     path("payorders/", paymentt),
     path("tablelists/", tablelists),
     path("add-table/", addTable),
