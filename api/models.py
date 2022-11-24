@@ -95,6 +95,12 @@ class OrderItem(models.Model):
     def totp(self):
         return (self.food_item.price) * (int(self.no_of_items))
 
+    def Total_Price(self):
+        return (self.food_item.price) * (int(self.no_of_items))
+
+    def Price_Each(self):
+        return self.food_item.price
+
 
 class Order(models.Model):
     ORDER_STATUS = (
@@ -120,8 +126,27 @@ class Order(models.Model):
             total += orderitemm.totp()
         return total
 
+    def Order_Total(self):
+        total = 0
+        for orderitemm in self.orderitems.all():
+            total += orderitemm.totp()
+        return total
+
+    def Order_Items(self):
+        strr = ""
+        for orderitemm in self.orderitems.all():
+            strr += (
+                str(orderitemm.no_of_items)
+                + " * "
+                + str(orderitemm.Price_Each())
+                + "  [ "
+                + orderitemm.food_item.name
+                + " ] | "
+            )
+        return strr
+
     def __str__(self):
-        return self.user.username + " Ordered " + self.status
+        return self.user.username + " Ordered "
 
 
 class Payment(models.Model):
