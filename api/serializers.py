@@ -6,7 +6,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         fields = "__all__"
         model = models.Payment
-        depth = 1
+        depth = 4
 
 
 class TableSerializer(serializers.ModelSerializer):
