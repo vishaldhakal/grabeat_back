@@ -274,7 +274,7 @@ def paymentt(request):
             discount_percentage=datas["discount_percentage"],
             amount_paidd=datas["amount_paid"],
         )
-        payme.set.order(ordee)
+        payme.order.set(ordee)
         """ if paymentmethod.payment_method_name == "Card":
             payme.bank_name = datas["bank_name"] """
         payme.save()
