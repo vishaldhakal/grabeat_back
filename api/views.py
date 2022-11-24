@@ -263,7 +263,7 @@ def paymentt(request):
         if datas["discount_value"]:
             discount_valuee = datas["discount_value"]
         else:
-            discount_valuee = 0
+            discount_valuee = 0.0
 
         if datas["discount_percentage"]:
             discount_percentagee = datas["discount_percentage"]
@@ -281,6 +281,7 @@ def paymentt(request):
             payment_method_name=datas["payment_method"]
         )
         ordee = Order.objects.filter(table=tablee)
+
         for ord in ordee:
             ord.status = "Order Paid"
             ord.save()
@@ -296,8 +297,10 @@ def paymentt(request):
             amount_paidd=amountt,
         )
         payme.order.set(ordee)
+
         if paymentmethod.payment_method_name == "Card":
             payme.bank_name = datas["bank_name"]
+
         if datas["payment_remarks"]:
             payme.payment_remarks = datas["payment_remarks"]
         payme.save()
