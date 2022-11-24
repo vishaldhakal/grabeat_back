@@ -89,8 +89,6 @@ def tablelists(request):
 
 
 @api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def orderslists(request):
     userr = User.objects.get(id=request.user.id)
     orders = Order.objects.filter(status="Order Placed")
@@ -123,8 +121,6 @@ def paymentlists_report(request):
 
 
 @api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def paymentorderlists(request):
     okayy = []
     userr = User.objects.get(id=request.user.id)
