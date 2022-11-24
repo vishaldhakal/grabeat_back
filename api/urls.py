@@ -29,7 +29,6 @@ from .views import (
     paymentlists_report,
     paymentorderlistsingle,
     orderslists_report,
-    food_search,
     CustomAuthToken,
 )
 
@@ -38,7 +37,6 @@ urlpatterns = [
     path("payment-report/", paymentlists_report),
     path("foodlists/", foodlists),
     path("foodlists_search/", foodlists_search),
-    path("food-search/", food_search),
     path("categorylists/", categorylists),
     path("orderslists/", orderslists),
     path("paymentorderlists/", paymentorderlists),
