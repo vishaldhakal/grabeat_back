@@ -21,6 +21,7 @@ ALLOWED_HOSTS = [
     ".dhakalvishal.com.np",
     "grabeatnp.herokuapp.com",
     "grabeat-back-6tg3y.ondigitalocean.app",
+    "51d8-103-186-197-251.ngrok.io",
 ]
 
 # Application definition
