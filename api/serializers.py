@@ -15,7 +15,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    order = OrderSerializer(many=True, read_only=True)()
+    order = OrderSerializer(many=True, read_only=True)
 
     class Meta:
         fields = "__all__"
