@@ -12,6 +12,7 @@ from .models import (
     Payment,
     CanclePayment,
 )
+from import_export.admin import ExportActionMixin
 
 admin.site.register(FoodCategory)
 admin.site.register(User)
@@ -23,7 +24,7 @@ admin.site.register(CanclePayment)
 
 
 @admin.register(Payment)
-class PaymentAdmin(admin.ModelAdmin):
+class PaymentAdmin(ExportActionMixin, admin.ModelAdmin):
     list_display = (
         "user",
         "created",
