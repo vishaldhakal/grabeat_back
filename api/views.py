@@ -255,6 +255,26 @@ def paymentt(request):
     try:
         datas = JSONParser().parse(request)
         idd = request.user.id
+        if datas["discount_type"]:
+            discount_typee = datas["discount_type"]
+        else:
+            discount_typee = "Percentage"
+        
+        if datas["discount_value"]:
+            discount_valuee = datas["discount_value"]
+        else:
+            discount_valuee = 0
+        
+        if datas["discount_percentage"]:
+            discount_percentagee = datas["discount_percentage"]
+        else:
+            discount_percentagee = 0
+        
+        if datas["amount_paid"]:
+            amountt = datas["amount_paid"]
+        else:
+            amountt = 0
+        
         userr = User.objects.get(id=idd)
         tablee = Table.objects.get(table_name=datas["table_name"])
         paymentmethod = PaymentMethod.objects.get(
@@ -264,15 +284,16 @@ def paymentt(request):
         for ord in ordee:
             ord.status = "Order Paid"
             ord.save()
+            
         payme = Payment.objects.create(
             user=userr,
             payment_method=paymentmethod,
             status="Paid",
             table=tablee,
-            discount_type=datas["discount_type"],
-            discount=datas["discount_value"],
-            discount_percentage=datas["discount_percentage"],
-            amount_paidd=datas["amount_paid"],
+            discount_type=discount_typee,
+            discount=discount_valuee,
+            discount_percentage=discount_percentagee,
+            amount_paidd=amountt,
         )
         payme.order.set(ordee)
         if paymentmethod.payment_method_name == "Card":
