@@ -340,8 +340,14 @@ def paymentt(request):
             amount_paidd=datas["amount_paid"],
         )
         payme.order.set(ordee)
+
         if paymentmethod.payment_method_name == "Card":
             payme.bank_name = datas["bank_name"]
+        try:
+            if datas["payment_remark"]:
+                payme.payment_remarks = datas["payment_remark"]
+        except:
+            pass
         payme.save()
 
         return JsonResponse(
