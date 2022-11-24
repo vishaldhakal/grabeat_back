@@ -62,8 +62,6 @@ class CustomAuthToken(ObtainAuthToken):
 
 
 @api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def foodlists(request):
     queryy = request.GET.get("query", "All")
     fooditems = FoodItem.objects.all()
