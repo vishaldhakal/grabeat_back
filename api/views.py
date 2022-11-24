@@ -114,8 +114,6 @@ def orderslists_report(request):
 
 
 @api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def paymentlists_report(request):
     orders = Payment.objects.filter(status="Paid")
     ordersserializer = PaymentSerializer(orders, many=True)
