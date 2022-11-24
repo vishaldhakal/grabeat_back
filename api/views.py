@@ -345,11 +345,11 @@ def paymentt(request):
 
         if paymentmethod.payment_method_name == "Card":
             payme.bank_name = datas["bank_name"]
-        try:
+        """ try:
             if datas["payment_remark"]:
                 payme.payment_remarks = datas["payment_remark"]
         except:
-            pass
+            pass """
         payme.save()
 
         return JsonResponse(
