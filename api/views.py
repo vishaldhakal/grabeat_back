@@ -275,8 +275,8 @@ def paymentt(request):
             amount_paidd=datas["amount_paid"],
         )
         payme.order.set(ordee)
-        """ if paymentmethod.payment_method_name == "Card":
-            payme.bank_name = datas["bank_name"] """
+        if paymentmethod.payment_method_name == "Card":
+            payme.bank_name = datas["bank_name"]
         payme.save()
 
         return JsonResponse(
