@@ -248,7 +248,7 @@ def submitcart(request):
         )
 
 
-@api_view(["POST"])
+""" @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def paymentt(request):
@@ -299,6 +299,49 @@ def paymentt(request):
 
         if datas["payment_remarks"]:
             payme.payment_remarks = datas["payment_remarks"]
+
+        payme.save()
+
+        return JsonResponse(
+            {"success": "Payment Submission Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Order Payment Failed"}, status=status.HTTP_400_BAD_REQUEST
+        )
+ """
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def paymentt(request):
+    try:
+        datas = JSONParser().parse(request)
+        idd = request.user.id
+        userr = User.objects.get(id=idd)
+        tablee = Table.objects.get(table_name=datas["table_name"])
+        paymentmethod = PaymentMethod.objects.get(
+            payment_method_name=datas["payment_method"]
+        )
+        ordee = Order.objects.filter(table=tablee)
+        for ord in ordee:
+            ord.status = "Order Paid"
+            ord.save()
+        payme = Payment.objects.create(
+            user=userr,
+            payment_method=paymentmethod,
+            status="Paid",
+            table=tablee,
+            discount_type=datas["discount_type"],
+            discount=datas["discount_value"],
+            discount_percentage=datas["discount_percentage"],
+            amount_paidd=datas["amount_paid"],
+        )
+        payme.order.set(ordee)
+        if paymentmethod.payment_method_name == "Card":
+            payme.bank_name = datas["bank_name"]
         payme.save()
 
         return JsonResponse(
