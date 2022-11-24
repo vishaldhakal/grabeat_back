@@ -325,7 +325,7 @@ def paymentt(request):
         paymentmethod = PaymentMethod.objects.get(
             payment_method_name=datas["payment_method"]
         )
-        ordee = Order.objects.filter(table=tablee)
+        ordee = Order.objects.filter(table=tablee, status="Order Completed")
         for ord in ordee:
             ord.status = "Order Paid"
             ord.save()
