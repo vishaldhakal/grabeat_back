@@ -65,7 +65,11 @@ class CustomAuthToken(ObtainAuthToken):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def foodlists(request):
+    queryy = request.GET.get("query", "All")
     fooditems = FoodItem.objects.all()
+    if queryy != "All":
+        fooditems = FoodItem.objects.filter(name__contains=queryy).order_by("-price")
+
     food_serializer = FoodItemSerializer(fooditems, many=True)
     categoryitems = FoodCategory.objects.all()
     categoryitems_serializer = FoodCategorySerializer(categoryitems, many=True)
