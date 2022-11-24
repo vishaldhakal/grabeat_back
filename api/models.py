@@ -170,6 +170,7 @@ class Payment(models.Model):
     payment_method = models.ForeignKey(
         PaymentMethod, on_delete=models.CASCADE, blank=True
     )
+    payment_remarks = models.TextField(blank=True)
     amount_paidd = models.FloatField(default=0)
     bank_name = models.CharField(max_length=500, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
