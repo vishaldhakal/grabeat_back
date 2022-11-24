@@ -12,7 +12,8 @@ from .models import (
     Payment,
     CanclePayment,
 )
-from import_export.admin import ExportActionMixin
+from import_export.admin import ImportExportActionModelAdmin
+from import_export import resources
 
 admin.site.register(FoodCategory)
 admin.site.register(User)
@@ -23,8 +24,18 @@ admin.site.register(CanclePayment)
 """ admin.site.register(DrinkItem) """
 
 
+class PaymentResource(resources.ModelResource):
+    class Meta:
+        model = Payment
+
+
+class OrderResource(resources.ModelResource):
+    class Meta:
+        model = Order
+
+
 @admin.register(Payment)
-class PaymentAdmin(ExportActionMixin, admin.ModelAdmin):
+class PaymentAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     list_display = (
         "user",
         "created",
@@ -41,6 +52,7 @@ class PaymentAdmin(ExportActionMixin, admin.ModelAdmin):
         "created",
         "updated",
     )
+    resource_class = PaymentResource
 
     class Meta:
         model = Payment
@@ -67,8 +79,8 @@ class OrderItemAdmin(admin.ModelAdmin):
         model = OrderItem
 
 
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
+    resource_class = OrderResource
     list_display = (
         "__str__",
         "table",
@@ -81,8 +93,8 @@ class OrderAdmin(admin.ModelAdmin):
     )
     list_filter = ("created", "updated", "table", "user")
 
-    class Meta:
-        model = Order
+
+admin.site.register(Order, OrderAdmin)
 
 
 @admin.register(FoodItem)
