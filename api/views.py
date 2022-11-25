@@ -92,7 +92,6 @@ def tablelists(request):
 
 @api_view(["GET"])
 def orderslists(request):
-    userr = User.objects.get(id=request.user.id)
     orders = Order.objects.filter(status="Order Placed")
     ordersserializer = OrderSerializer(orders, many=True)
     subtotal = []
