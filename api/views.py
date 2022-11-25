@@ -120,6 +120,23 @@ def paymentlists_report(request):
     return Response(ordersserializer.data)
 
 
+@api_view(["POST"])
+def kot_printed(request, id):
+    try:
+        orders = Order.objects.get(id=id)
+        orders.is_kot_printed = True
+        orders.save()
+        return JsonResponse(
+            {"success": "Kot Printed Successfull"},
+            status=status.HTTP_201_CREATED,
+        )
+    except:
+        return JsonResponse(
+            {"error": "Kot Print Error"},
+            status=status.HTTP_201_CREATED,
+        )
+
+
 @api_view(["GET"])
 def paymentorderlists(request):
     okayy = []

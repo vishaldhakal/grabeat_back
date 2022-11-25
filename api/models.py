@@ -119,6 +119,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     cancle_reason = models.TextField(blank=True)
+    is_kot_printed = models.BooleanField(default=False)
 
     def ordertotal(self):
         total = 0
