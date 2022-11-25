@@ -139,7 +139,6 @@ def kot_printed(request, id):
 @api_view(["GET"])
 def paymentorderlists(request):
     okayy = []
-    userr = User.objects.get(id=request.user.id)
     tabless = Table.objects.all()
     for table in tabless:
         ordee = Order.objects.filter(status="Order Completed", table=table)
