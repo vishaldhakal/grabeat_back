@@ -121,6 +121,9 @@ class Order(models.Model):
     cancle_reason = models.TextField(blank=True)
     is_kot_printed = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ("-created",)
+
     def ordertotal(self):
         total = 0
         for orderitemm in self.orderitems.all():
@@ -177,6 +180,9 @@ class Payment(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ("-created",)
 
     def paymenttotal(self):
         total = 0
