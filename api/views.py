@@ -225,7 +225,8 @@ def cancleapyment(request, id):
 def submitcart(request):
     try:
         datas = JSONParser().parse(request)
-        userr = User.objects.get(id=request.user.id)
+        idd = request.user.id
+        userr = User.objects.get(id=idd)
         tabb = Table.objects.get(table_name=datas["table"])
         if datas["ordernote"]:
             ordee = Order.objects.create(
@@ -240,16 +241,16 @@ def submitcart(request):
             newobj = OrderItem.objects.create(
                 user=userr, food_item=foodi, no_of_items=data["qty"]
             )
-            if foodi.is_a_drink:
+            """ if foodi.is_a_drink:
                 drinkkk = DrinkItem.objects.get(name=foodi.name)
-                """ newobj.drink_quantity = data["drink_quantity"]
-                newobj.save() """
+                newobj.drink_quantity = data["drink_quantity"]
+                newobj.save()
                 try:
                     dp = DrinksPurchase.objects.get(drinkk=drinkkk)
                     dp.quantity -= int(data["drink_quantity"])
                     dp.save()
                 except:
-                    pass
+                    pass """
             ordee.orderitems.add(newobj)
 
         ordee.save()
