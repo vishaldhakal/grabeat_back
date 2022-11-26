@@ -132,7 +132,7 @@ def kot_printed(request, id):
     except:
         return JsonResponse(
             {"error": "Kot Print Error"},
-            status=status.HTTP_201_CREATED,
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
