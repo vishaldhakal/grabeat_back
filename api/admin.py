@@ -14,6 +14,8 @@ from .models import (
 )
 from import_export.admin import ImportExportActionModelAdmin
 from import_export import resources
+from admin_totals.admin import ModelAdminTotals
+from django.db.models import Sum, Avg
 
 admin.site.register(FoodCategory)
 admin.site.register(User)
@@ -35,7 +37,7 @@ class OrderResource(resources.ModelResource):
 
 
 @admin.register(Payment)
-class PaymentAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
+class PaymentAdmin(ImportExportActionModelAdmin, ModelAdminTotals, admin.ModelAdmin):
     list_display = (
         "user",
         "created",
@@ -51,8 +53,12 @@ class PaymentAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     list_filter = (
         "created",
         "updated",
+        "table__table_name",
+        "user__username",
+        "payment_method__payment_method_name",
     )
     resource_class = PaymentResource
+    list_totals = [("discount", Sum), ("amount_paidd", Sum)]
 
     class Meta:
         model = Payment
