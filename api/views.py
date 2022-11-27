@@ -92,9 +92,27 @@ def tablelists(request):
 
 @api_view(["GET"])
 def orderslists(request):
-    orders = Order.objects.filter(status="Order Placed")
+
+    table = request.GET.get("table", "All")
+    waiter = request.GET.get("waiter", "All")
+    orders = []
+
+    if (table == "All") & (waiter == "All"):
+        orders = Order.objects.filter(status="Order Placed")
+    elif (table == "All") & (waiter != "All"):
+        usss = User.objects.get(username=waiter)
+        orders = Order.objects.filter(status="Order Placed", user=usss)
+    elif (table != "All") & (waiter == "All"):
+        table = Table.objects.get(table_name=table)
+        orders = Order.objects.filter(status="Order Placed", table=table)
+    else:
+        usss = User.objects.get(username=waiter)
+        table = Table.objects.get(table_name=table)
+        orders = Order.objects.filter(status="Order Placed", table=table, user=usss)
+
     ordersserializer = OrderSerializer(orders, many=True)
     subtotal = []
+    
     for order in orders:
         subtotal.append(order.ordertotal())
     return Response({"orderdata": ordersserializer.data, "subtotal": subtotal})
