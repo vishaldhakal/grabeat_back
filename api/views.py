@@ -111,7 +111,7 @@ def orderslists(request):
         table = Table.objects.get(table_name=table)
         orders = Order.objects.filter(status="Order Placed", table=table, user=usss)
 
-    userss = User.objects.filter(user_type="Waiter")
+    userss = User.objects.all()
     userss_serializer = UserSerializer(userss, many=True)
     tabless = Table.objects.all()
     tabless_serializer = TableSerializer(tabless, many=True)
