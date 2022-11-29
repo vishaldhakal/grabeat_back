@@ -139,14 +139,36 @@ def orderslists_report(request):
     subtotal = []
     for order in orders:
         subtotal.append(order.ordertotal())
-    return Response({"orderdata": ordersserializer.data, "subtotal": subtotal})
+
+    userss = User.objects.all()
+    userss_serializer = UserSerializer(userss, many=True)
+    tabless = Table.objects.all()
+    tabless_serializer = TableSerializer(tabless, many=True)
+    return Response(
+        {
+            "orderdata": ordersserializer.data,
+            "subtotal": subtotal,
+            "users": userss_serializer.data,
+            "tables": tabless_serializer.data,
+        }
+    )
 
 
 @api_view(["GET"])
 def paymentlists_report(request):
     orders = Payment.objects.filter(status="Paid")
     ordersserializer = PaymentSerializer(orders, many=True)
-    return Response(ordersserializer.data)
+    userss = User.objects.all()
+    userss_serializer = UserSerializer(userss, many=True)
+    tabless = Table.objects.all()
+    tabless_serializer = TableSerializer(tabless, many=True)
+    return Response(
+        {
+            "payments": ordersserializer.data,
+            "users": userss_serializer.data,
+            "tables": tabless_serializer.data,
+        }
+    )
 
 
 @api_view(["POST"])
@@ -176,7 +198,18 @@ def paymentorderlists(request):
             ordersserializer = OrderSerializer(ordee, many=True)
             okayy.append(ordersserializer.data)
 
-    return Response(okayy)
+    userss = User.objects.all()
+    userss_serializer = UserSerializer(userss, many=True)
+    tabless = Table.objects.all()
+    tabless_serializer = TableSerializer(tabless, many=True)
+
+    return Response(
+        {
+            "payments": okayy,
+            "users": userss_serializer.data,
+            "tables": tabless_serializer.data,
+        }
+    )
 
 
 @api_view(["GET"])
