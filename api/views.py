@@ -37,6 +37,7 @@ from .serializers import (
     TaxSerializer,
     PaymentSerializer,
 )
+from accounts.serializers import UserSerializer
 from inventory.models import DrinksPurchase
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -110,12 +111,23 @@ def orderslists(request):
         table = Table.objects.get(table_name=table)
         orders = Order.objects.filter(status="Order Placed", table=table, user=usss)
 
+    userss = User.objects.filter(user_type="Waiter")
+    userss_serializer = UserSerializer(orders, many=True)
+    tabless = Table.objects.all()
+    tabless_serializer = TableSerializer(orders, many=True)
     ordersserializer = OrderSerializer(orders, many=True)
     subtotal = []
-    
+
     for order in orders:
         subtotal.append(order.ordertotal())
-    return Response({"orderdata": ordersserializer.data, "subtotal": subtotal})
+    return Response(
+        {
+            "orderdata": ordersserializer.data,
+            "subtotal": subtotal,
+            "users": userss_serializer.data,
+            "tables": tabless_serializer.data,
+        }
+    )
 
 
 @api_view(["GET"])
