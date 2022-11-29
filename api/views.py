@@ -112,9 +112,9 @@ def orderslists(request):
         orders = Order.objects.filter(status="Order Placed", table=table, user=usss)
 
     userss = User.objects.filter(user_type="Waiter")
-    userss_serializer = UserSerializer(orders, many=True)
+    userss_serializer = UserSerializer(userss, many=True)
     tabless = Table.objects.all()
-    tabless_serializer = TableSerializer(orders, many=True)
+    tabless_serializer = TableSerializer(tabless, many=True)
     ordersserializer = OrderSerializer(orders, many=True)
     subtotal = []
 
