@@ -131,8 +131,6 @@ def orderslists(request):
 
 
 @api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def orderslists_report(request):
     orders = Order.objects.filter(status="Order Paid")
     ordersserializer = OrderSerializer(orders, many=True)
