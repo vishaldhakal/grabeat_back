@@ -42,11 +42,20 @@ class FoodCategory(models.Model):
 
 
 class FoodItem(models.Model):
+    METRICES = (
+        ("Ml", "Ml"),
+        ("Qtr", "Qtr"),
+        ("Half", "Half"),
+        ("Full", "Full"),
+    )
+
     category = models.ManyToManyField(FoodCategory)
     name = models.CharField(max_length=500)
     thumbnail_image = models.FileField()
     price = models.IntegerField()
     is_a_drink = models.BooleanField(default=False)
+    drink_quantity = models.IntegerField(default=0)
+    drink_metric = models.CharField(max_length=400, default="Ml", choices=METRICES)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     description = models.TextField(blank=True)
@@ -81,8 +90,6 @@ class OrderItem(models.Model):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     no_of_items = models.CharField(max_length=10, default=1)
-    drink_quantity = models.IntegerField(default=0)
-    drink_metric = models.CharField(max_length=400, default="Ml")
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     cart_status = models.CharField(max_length=500, default="Ordered")

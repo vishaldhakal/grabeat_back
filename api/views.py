@@ -302,16 +302,31 @@ def submitcart(request):
             newobj = OrderItem.objects.create(
                 user=userr, food_item=foodi, no_of_items=data["qty"]
             )
-            """ if foodi.is_a_drink:
-                drinkkk = DrinkItem.objects.get(name=foodi.name)
-                newobj.drink_quantity = data["drink_quantity"]
-                newobj.save()
+            if foodi.is_a_drink:
                 try:
-                    dp = DrinksPurchase.objects.get(drinkk=drinkkk)
-                    dp.quantity -= int(data["drink_quantity"])
+                    drinkkk = DrinkItem.objects.filter(id=foodi.id)
+                    dp = DrinksPurchase.objects.get(drinkk=drinkkk[0])
+                    if foodi.drink_metric == "Ml":
+                        calc = dp.quantity
+                        calc -= int(data["qty"]) * foodi.drink_quantity
+                        dp.quantity = calc
+                    elif foodi.drink_metric == "Qtr":
+                        calc = dp.quantity
+                        calc -= int(data["qty"]) * 250
+                        dp.quantity = calc
+                    elif foodi.drink_metric == "Half":
+                        calc = dp.quantity
+                        calc -= int(data["qty"]) * 500
+                        dp.quantity = calc
+                    elif foodi.drink_metric == "Full":
+                        calc = dp.quantity
+                        calc -= int(data["qty"]) * 1000
+                        dp.quantity = calc
+                    else:
+                        pass
                     dp.save()
                 except:
-                    pass """
+                    pass
             ordee.orderitems.add(newobj)
 
         ordee.save()
