@@ -31,12 +31,18 @@ from .views import (
     orderslists_report,
     kot_printed,
     all_report,
+    purchases_report,
+    drinks_report,
+    paymentss_report,
     CustomAuthToken,
 )
 
 urlpatterns = [
     path("order-report/", orderslists_report),
     path("all-report/", all_report),
+    path("purchase-report/", purchases_report),
+    path("payments-report/", paymentss_report),
+    path("drinks-report/", drinks_report),
     path("payment-report/", paymentlists_report),
     path("foodlists/", foodlists),
     path("foodlists_search/", foodlists_search),

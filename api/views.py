@@ -165,6 +165,51 @@ def all_report(request):
 
 
 @api_view(["GET"])
+def paymentss_report(request):
+    payments = Payment.objects.filter(status="Paid")
+    payments_serializer = PaymentSmallSerializer(payments, many=True)
+
+    return Response(
+        {
+            "payments": payments_serializer.data,
+        }
+    )
+
+
+@api_view(["GET"])
+def purchases_report(request):
+
+    purchases = Purchase.objects.all()
+    purchases_serializer = PurchaseSerializer(purchases, many=True)
+
+    return Response(
+        {
+            "purchase": purchases_serializer.data,
+        }
+    )
+
+
+@api_view(["GET"])
+def drinks_report(request):
+    drinkspurchase = DrinksPurchase.objects.all()
+    drinkspurchase_serializer = DrinkPurchaseSerializer(drinkspurchase, many=True)
+
+    drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True)
+    drinkorders_serializer = OrderItemSerializer(drinkorders, many=True)
+
+    drinkstocks = DrinksStock.objects.all()
+    drinkstocks_serializer = DrinkStockSerializer(drinkstocks, many=True)
+
+    return Response(
+        {
+            "drinks_purchase": drinkspurchase_serializer.data,
+            "drinkorders": drinkorders_serializer.data,
+            "drinkstocks": drinkstocks_serializer.data,
+        }
+    )
+
+
+@api_view(["GET"])
 def orderslists_report(request):
     orders = Order.objects.filter(status="Order Paid")
     ordersserializer = OrderSerializer(orders, many=True)
