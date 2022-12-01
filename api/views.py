@@ -211,7 +211,22 @@ def drinks_report(request):
 
 @api_view(["GET"])
 def orderslists_report(request):
-    orders = Order.objects.filter(status="Order Paid")
+    table = request.GET.get("table", "All")
+    waiter = request.GET.get("waiter", "All")
+
+    if (table == "All") & (waiter == "All"):
+        orders = Order.objects.filter(status="Order Paid")
+    elif (table == "All") & (waiter != "All"):
+        usss = User.objects.get(username=waiter)
+        orders = Order.objects.filter(status="Order Paid", user=usss)
+    elif (table != "All") & (waiter == "All"):
+        table = Table.objects.get(table_name=table)
+        orders = Order.objects.filter(status="Order Paid", table=table)
+    else:
+        usss = User.objects.get(username=waiter)
+        table = Table.objects.get(table_name=table)
+        orders = Order.objects.filter(status="Order Paid", table=table, user=usss)
+
     ordersserializer = OrderSerializer(orders, many=True)
     subtotal = []
     for order in orders:
@@ -233,7 +248,23 @@ def orderslists_report(request):
 
 @api_view(["GET"])
 def paymentlists_report(request):
-    orders = Payment.objects.filter(status="Paid")
+
+    table = request.GET.get("table", "All")
+    waiter = request.GET.get("waiter", "All")
+
+    if (table == "All") & (waiter == "All"):
+        orders = Payment.objects.filter(status="Paid")
+    elif (table == "All") & (waiter != "All"):
+        usss = User.objects.get(username=waiter)
+        orders = Payment.objects.filter(status="Paid", user=usss)
+    elif (table != "All") & (waiter == "All"):
+        table = Table.objects.get(table_name=table)
+        orders = Payment.objects.filter(status="Paid", table=table)
+    else:
+        usss = User.objects.get(username=waiter)
+        table = Table.objects.get(table_name=table)
+        orders = Payment.objects.filter(status="Paid", user=usss, table=table)
+
     ordersserializer = PaymentSerializer(orders, many=True)
     userss = User.objects.all()
     userss_serializer = UserSerializer(userss, many=True)
@@ -268,9 +299,25 @@ def kot_printed(request, id):
 @api_view(["GET"])
 def paymentorderlists(request):
     okayy = []
-    tabless = Table.objects.all()
+
+    table = request.GET.get("table", "All")
+    waiter = request.GET.get("waiter", "All")
+
+    if table == "All":
+        tabless = Table.objects.all()
+    else:
+        tabless = Table.objects.get(table_name=table)
+
     for table in tabless:
-        ordee = Order.objects.filter(status="Order Completed", table=table)
+        if waiter == "All":
+            ordee = Order.objects.filter(status="Order Completed", table=table)
+        else:
+            usss = User.objects.get(username=waiter)
+            tabless = Table.objects.get(table_name=table)
+            ordee = Order.objects.filter(
+                status="Order Completed", table=table, user=usss
+            )
+
         if ordee:
             ordersserializer = OrderSerializer(ordee, many=True)
             okayy.append(ordersserializer.data)
