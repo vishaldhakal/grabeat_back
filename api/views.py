@@ -308,7 +308,7 @@ def paymentorderlists(request):
     if table == "All":
         tabless = Table.objects.all()
     else:
-        tabless = Table.objects.get(table_name=table)
+        tabless = Table.objects.filter(table_name=table)
 
     for table in tabless:
         if waiter == "All":
