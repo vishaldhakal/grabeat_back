@@ -20,12 +20,19 @@ class Ingredient(models.Model):
 
 
 class Purchase(models.Model):
+    METRICES = (
+        ("Ml", "Ml"),
+        ("Ltr", "Ltr"),
+        ("Kg", "Kg"),
+        ("Packets", "Packets"),
+    )
+
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     payment_type = models.CharField(max_length=500, default="Cash")
     quantity = models.IntegerField()
-    metric = models.CharField(max_length=100)
+    metric = models.CharField(max_length=100, default="Kg", choices=METRICES)
     price = models.IntegerField()
     purchase_bill = models.FileField(blank=True)
     remarks = models.TextField(blank=True)
