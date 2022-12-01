@@ -5,6 +5,5 @@ from api.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = "__all__"
+        fields = ["id", "username", "user_type"]
         model = User
-        depth = 1

@@ -338,7 +338,6 @@ def submitcart(request):
             )
             if foodi.is_a_drink:
                 try:
-
                     drinkkk = DrinkItem.objects.get(name=foodi.name)
                     dp = DrinksStock.objects.get(drinkk=drinkkk)
 

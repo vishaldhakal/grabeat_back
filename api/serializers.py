@@ -2,23 +2,35 @@ from rest_framework import serializers
 from . import models
 
 
-class PaymentSmallSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = (
+        fields = ["id", "username", "first_name", "last_name", "user_type"]
+        model = models.User
+
+
+class PaymentSmallSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        fields = [
+            "id",
             "table",
+            "user",
             "discount",
             "payment_remarks",
             "amount_paidd",
             "bank_name",
             "created",
             "payment_method",
-        )
+        ]
         model = models.Payment
         depth = 1
 
 
 class OrderSerializer(serializers.ModelSerializer):
     totals = serializers.SerializerMethodField()
+    user = UserSerializer(read_only=True)
 
     def get_totals(self, obj):
         return obj.ordertotal()
@@ -31,6 +43,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class PaymentSerializer(serializers.ModelSerializer):
     order = OrderSerializer(many=True, read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         fields = "__all__"
@@ -74,14 +87,9 @@ class FoodItemSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         fields = "__all__"
         model = models.OrderItem
-        depth = 1
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = "__all__"
-        model = models.User
         depth = 1
