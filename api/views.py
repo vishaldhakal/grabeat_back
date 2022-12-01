@@ -304,8 +304,9 @@ def submitcart(request):
             )
             if foodi.is_a_drink:
                 try:
-                    drinkkk = DrinkItem.objects.filter(id=foodi.id)
-                    dp = DrinksPurchase.objects.get(drinkk=drinkkk[0])
+                    drinkkk = DrinkItem.objects.get(name=foodi.name)
+                    dp = DrinksPurchase.objects.get(drinkk=drinkkk)
+
                     if foodi.drink_metric == "Ml":
                         calc = dp.quantity
                         calc -= int(data["qty"]) * foodi.drink_quantity

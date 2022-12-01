@@ -79,9 +79,13 @@ class DrinkItem(models.Model):
 def create_drink(sender, instance=None, created=False, **kwargs):
     if created:
         if instance.is_a_drink:
-            DrinkItem.objects.create(
-                name=instance.name, thumbnail_image=instance.thumbnail_image
-            )
+            check = DrinkItem.objects.filter(name=instance.name)
+            if check.exists():
+                pass
+            else:
+                DrinkItem.objects.create(
+                    name=instance.name, thumbnail_image=instance.thumbnail_image
+                )
 
 
 class OrderItem(models.Model):
