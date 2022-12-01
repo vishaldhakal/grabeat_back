@@ -373,9 +373,6 @@ def submitcart(request):
             )
         for data in datas["cartt"]:
             foodi = FoodItem.objects.get(id=data["item"]["id"])
-            newobj = OrderItem.objects.create(
-                user=userr, food_item=foodi, no_of_items=data["qty"]
-            )
             if foodi.is_a_drink:
                 try:
                     drinkkk = DrinkItem.objects.get(name=foodi.name)
@@ -426,6 +423,10 @@ def submitcart(request):
                     dp.save()
                 except:
                     pass
+
+            newobj = OrderItem.objects.create(
+                user=userr, food_item=foodi, no_of_items=data["qty"]
+            )
             ordee.orderitems.add(newobj)
 
         ordee.save()
