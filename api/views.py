@@ -531,8 +531,8 @@ def paymentt(request):
             status="Paid",
             table=tablee,
             discount_type=datas["discount_type"],
-            discount=datas["discount_value"],
-            discount_percentage=datas["discount_percentage"],
+            discount=datas["discount_value"] | 0.0,
+            discount_percentage=datas["discount_percentage"] | 0,
             amount_paidd=datas["amount_paid"],
         )
         payme.order.set(ordee)
