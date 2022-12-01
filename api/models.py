@@ -93,7 +93,7 @@ class OrderItem(models.Model):
         FoodItem, on_delete=models.CASCADE, blank=True, null=True
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    no_of_items = models.CharField(max_length=10, default=1)
+    no_of_items = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     cart_status = models.CharField(max_length=500, default="Ordered")
