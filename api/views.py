@@ -281,7 +281,7 @@ def completeorder(request, id):
 def cancleorder(request, id):
     datas = JSONParser().parse(request)
     orders = Order.objects.get(id=int(id))
-    for itemm in orders.orderitems:
+    for itemm in orders.orderitems.all():
         if itemm.food_item.is_a_drink:
             foodi = itemm.food_item
             try:
@@ -309,6 +309,9 @@ def cancleorder(request, id):
                 dp.save()
             except:
                 pass
+        else:
+            pass
+
     orders.status = "Order Canceled"
     if datas:
         orders.cancle_reason = datas["cancel_reason"]
