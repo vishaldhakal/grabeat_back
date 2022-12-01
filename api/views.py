@@ -309,18 +309,38 @@ def submitcart(request):
 
                     if foodi.drink_metric == "Ml":
                         calc = dp.quantity
+                        if (int(data["qty"]) * foodi.drink_quantity) > calc:
+                            return JsonResponse(
+                                {"error": foodi.name + " Not Available in Inventory"},
+                                status=status.HTTP_400_BAD_REQUEST,
+                            )
                         calc -= int(data["qty"]) * foodi.drink_quantity
                         dp.quantity = calc
                     elif foodi.drink_metric == "Qtr":
                         calc = dp.quantity
+                        if (int(data["qty"]) * 250) > calc:
+                            return JsonResponse(
+                                {"error": foodi.name + " Not Available in Inventory"},
+                                status=status.HTTP_400_BAD_REQUEST,
+                            )
                         calc -= int(data["qty"]) * 250
                         dp.quantity = calc
                     elif foodi.drink_metric == "Half":
                         calc = dp.quantity
+                        if (int(data["qty"]) * 500) > calc:
+                            return JsonResponse(
+                                {"error": foodi.name + " Not Available in Inventory"},
+                                status=status.HTTP_400_BAD_REQUEST,
+                            )
                         calc -= int(data["qty"]) * 500
                         dp.quantity = calc
                     elif foodi.drink_metric == "Full":
                         calc = dp.quantity
+                        if (int(data["qty"]) * 1000) > calc:
+                            return JsonResponse(
+                                {"error": foodi.name + " Not Available in Inventory"},
+                                status=status.HTTP_400_BAD_REQUEST,
+                            )
                         calc -= int(data["qty"]) * 1000
                         dp.quantity = calc
                     else:
