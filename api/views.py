@@ -281,6 +281,34 @@ def completeorder(request, id):
 def cancleorder(request, id):
     datas = JSONParser().parse(request)
     orders = Order.objects.get(id=int(id))
+    for itemm in orders.orderitems:
+        if itemm.food_item.is_a_drink:
+            foodi = itemm.food_item
+            try:
+                drinkkk = DrinkItem.objects.get(name=foodi.name)
+                dpp = DrinksStock.objects.filter(drinkk=drinkkk)
+                dp = dpp[0]
+                if foodi.drink_metric == "Ml":
+                    calc = dp.quantity
+                    calc += int(itemm.no_of_items) * foodi.drink_quantity
+                    dp.quantity = calc
+                elif foodi.drink_metric == "Qtr":
+                    calc = dp.quantity
+                    calc += int(itemm.no_of_items) * 250
+                    dp.quantity = calc
+                elif foodi.drink_metric == "Half":
+                    calc = dp.quantity
+                    calc += int(itemm.no_of_items) * 500
+                    dp.quantity = calc
+                elif foodi.drink_metric == "Full":
+                    calc = dp.quantity
+                    calc += int(itemm.no_of_items) * 1000
+                    dp.quantity = calc
+                else:
+                    pass
+                dp.save()
+            except:
+                pass
     orders.status = "Order Canceled"
     if datas:
         orders.cancle_reason = datas["cancel_reason"]
@@ -339,8 +367,8 @@ def submitcart(request):
             if foodi.is_a_drink:
                 try:
                     drinkkk = DrinkItem.objects.get(name=foodi.name)
-                    dp = DrinksStock.objects.get(drinkk=drinkkk)
-
+                    dpp = DrinksStock.objects.filter(drinkk=drinkkk)
+                    dp = dpp[0]
                     if foodi.drink_metric == "Ml":
                         calc = dp.quantity
                         if (int(data["qty"]) * foodi.drink_quantity) > calc:
