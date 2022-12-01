@@ -310,6 +310,7 @@ def submitcart(request):
                     if foodi.drink_metric == "Ml":
                         calc = dp.quantity
                         if (int(data["qty"]) * foodi.drink_quantity) > calc:
+                            ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
                                 status=status.HTTP_400_BAD_REQUEST,
@@ -319,6 +320,7 @@ def submitcart(request):
                     elif foodi.drink_metric == "Qtr":
                         calc = dp.quantity
                         if (int(data["qty"]) * 250) > calc:
+                            ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
                                 status=status.HTTP_400_BAD_REQUEST,
@@ -328,6 +330,7 @@ def submitcart(request):
                     elif foodi.drink_metric == "Half":
                         calc = dp.quantity
                         if (int(data["qty"]) * 500) > calc:
+                            ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
                                 status=status.HTTP_400_BAD_REQUEST,
@@ -337,6 +340,7 @@ def submitcart(request):
                     elif foodi.drink_metric == "Full":
                         calc = dp.quantity
                         if (int(data["qty"]) * 1000) > calc:
+                            ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
                                 status=status.HTTP_400_BAD_REQUEST,
