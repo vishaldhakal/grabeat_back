@@ -143,11 +143,15 @@ def all_report(request):
     purchases = Purchase.objects.all()
     purchases_serializer = PurchaseSerializer(purchases, many=True)
 
+    drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True)
+    drinkorders_serializer = OrderItemSerializer(drinkorders, many=True)
+
     return Response(
         {
             "payments": payments_serializer.data,
             "drinks_purchse": drinkspurchase_serializer.data,
             "purchase": purchases_serializer.data,
+            "drinkorders": drinkorders_serializer.data,
         }
     )
 
