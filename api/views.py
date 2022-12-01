@@ -38,9 +38,13 @@ from .serializers import (
     PaymentSerializer,
     PaymentSmallSerializer,
 )
-from inventory.serializers import DrinkPurchaseSerializer, PurchaseSerializer
+from inventory.serializers import (
+    DrinkPurchaseSerializer,
+    PurchaseSerializer,
+    DrinkStockSerializer,
+)
 from accounts.serializers import UserSerializer
-from inventory.models import DrinksPurchase, Purchase
+from inventory.models import DrinksPurchase, Purchase, DrinksStock
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -146,12 +150,16 @@ def all_report(request):
     drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True)
     drinkorders_serializer = OrderItemSerializer(drinkorders, many=True)
 
+    drinkstocks = DrinksStock.objects.all()
+    drinkstocks_serializer = DrinkStockSerializer(drinkstocks, many=True)
+
     return Response(
         {
             "payments": payments_serializer.data,
             "drinks_purchse": drinkspurchase_serializer.data,
             "purchase": purchases_serializer.data,
             "drinkorders": drinkorders_serializer.data,
+            "drinkstocks": drinkstocks_serializer.data,
         }
     )
 
@@ -330,8 +338,9 @@ def submitcart(request):
             )
             if foodi.is_a_drink:
                 try:
+
                     drinkkk = DrinkItem.objects.get(name=foodi.name)
-                    dp = DrinksPurchase.objects.get(drinkk=drinkkk)
+                    dp = DrinksStock.objects.get(drinkk=drinkkk)
 
                     if foodi.drink_metric == "Ml":
                         calc = dp.quantity

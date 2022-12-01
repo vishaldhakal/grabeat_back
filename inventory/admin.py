@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Supplier, Ingredient, Purchase, Stockout, DrinksPurchase
+from .models import (
+    Supplier,
+    Ingredient,
+    Purchase,
+    Stockout,
+    DrinksPurchase,
+    DrinksStock,
+)
 from admin_totals.admin import ModelAdminTotals
 from django.db.models import Sum, Avg
 
@@ -7,6 +14,7 @@ admin.site.register(Supplier)
 admin.site.register(Ingredient)
 admin.site.register(Stockout)
 admin.site.register(DrinksPurchase)
+admin.site.register(DrinksStock)
 
 
 @admin.register(Purchase)
