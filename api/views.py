@@ -313,7 +313,7 @@ def submitcart(request):
                             ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
-                                status=status.HTTP_400_BAD_REQUEST,
+                                status=status.HTTP_403_FORBIDDEN,
                             )
                         calc -= int(data["qty"]) * foodi.drink_quantity
                         dp.quantity = calc
@@ -323,7 +323,7 @@ def submitcart(request):
                             ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
-                                status=status.HTTP_400_BAD_REQUEST,
+                                status=status.HTTP_403_FORBIDDEN,
                             )
                         calc -= int(data["qty"]) * 250
                         dp.quantity = calc
@@ -333,7 +333,7 @@ def submitcart(request):
                             ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
-                                status=status.HTTP_400_BAD_REQUEST,
+                                status=status.HTTP_403_FORBIDDEN,
                             )
                         calc -= int(data["qty"]) * 500
                         dp.quantity = calc
@@ -343,7 +343,7 @@ def submitcart(request):
                             ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
-                                status=status.HTTP_400_BAD_REQUEST,
+                                status=status.HTTP_403_FORBIDDEN,
                             )
                         calc -= int(data["qty"]) * 1000
                         dp.quantity = calc
