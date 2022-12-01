@@ -36,9 +36,11 @@ from .serializers import (
     VatSerializer,
     TaxSerializer,
     PaymentSerializer,
+    PaymentSmallSerializer,
 )
+from inventory.serializers import DrinkPurchaseSerializer, PurchaseSerializer
 from accounts.serializers import UserSerializer
-from inventory.models import DrinksPurchase
+from inventory.models import DrinksPurchase, Purchase
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -126,6 +128,26 @@ def orderslists(request):
             "subtotal": subtotal,
             "users": userss_serializer.data,
             "tables": tabless_serializer.data,
+        }
+    )
+
+
+@api_view(["GET"])
+def all_report(request):
+    payments = Payment.objects.filter(status="Paid")
+    payments_serializer = PaymentSmallSerializer(payments, many=True)
+
+    drinkspurchase = DrinksPurchase.objects.all()
+    drinkspurchase_serializer = DrinkPurchaseSerializer(drinkspurchase, many=True)
+
+    purchases = Purchase.objects.all()
+    purchases_serializer = PurchaseSerializer(purchases, many=True)
+
+    return Response(
+        {
+            "payments": payments_serializer.data,
+            "drinks_purchse": drinkspurchase_serializer.data,
+            "purchase": purchases_serializer.data,
         }
     )
 

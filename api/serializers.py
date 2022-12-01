@@ -2,6 +2,21 @@ from rest_framework import serializers
 from . import models
 
 
+class PaymentSmallSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            "table",
+            "discount",
+            "payment_remarks",
+            "amount_paidd",
+            "bank_name",
+            "created",
+            "payment_method",
+        )
+        model = models.Payment
+        depth = 1
+
+
 class OrderSerializer(serializers.ModelSerializer):
     totals = serializers.SerializerMethodField()
 
