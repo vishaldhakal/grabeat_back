@@ -89,6 +89,15 @@ def create_drink(sender, instance=None, created=False, **kwargs):
 
 
 class OrderItem(models.Model):
+
+    ORDER_STATUS = (
+        ("Ordered", "Ordered"),
+        ("Order Completed", "Order Completed"),
+        ("Order Paid", "Order Paid"),
+        ("Order Canceled", "Order Canceled"),
+        ("Payment Canceled", "Payment Canceled"),
+    )
+
     food_item = models.ForeignKey(
         FoodItem, on_delete=models.CASCADE, blank=True, null=True
     )
@@ -96,7 +105,7 @@ class OrderItem(models.Model):
     no_of_items = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
-    cart_status = models.CharField(max_length=500, default="Ordered")
+    status = models.CharField(max_length=500, default="Ordered", choices=ORDER_STATUS)
 
     def __str__(self):
         return (

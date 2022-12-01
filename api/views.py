@@ -268,6 +268,9 @@ def paymentorderlistsingle(request, id):
 def completeorder(request, id):
     orders = Order.objects.get(id=int(id))
     orders.status = "Order Completed"
+    for itemm in orders.orderitems.all():
+        itemm.status = "Order Completed"
+        itemm.save()
     orders.save()
     return JsonResponse(
         {"success": "Order Completion Successfull"},
@@ -282,6 +285,8 @@ def cancleorder(request, id):
     datas = JSONParser().parse(request)
     orders = Order.objects.get(id=int(id))
     for itemm in orders.orderitems.all():
+        itemm.status = "Order Canceled"
+        itemm.save()
         if itemm.food_item.is_a_drink:
             foodi = itemm.food_item
             try:
@@ -334,6 +339,10 @@ def cancleapyment(request, id):
     for ord in ordee:
         ord.status = "Order Canceled"
         ord.save()
+        for itemm in ord.orderitems.all():
+            itemm.status = "Payment Canceled"
+            itemm.save()
+
     payme = CanclePayment.objects.create(user=usss, status="Unpaid", table=tablee)
     payme.order.set(ordee)
     if datas:
@@ -511,6 +520,10 @@ def paymentt(request):
         for ord in ordee:
             ord.status = "Order Paid"
             ord.save()
+            for itemm in ord.orderitems.all():
+                itemm.status = "Order Paid"
+                itemm.save()
+
         payme = Payment.objects.create(
             user=userr,
             payment_method=paymentmethod,
