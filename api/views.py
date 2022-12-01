@@ -303,6 +303,8 @@ def paymentorderlists(request):
     table = request.GET.get("table", "All")
     waiter = request.GET.get("waiter", "All")
 
+    tabless = Table.objects.all()
+
     if table == "All":
         tabless = Table.objects.all()
     else:
