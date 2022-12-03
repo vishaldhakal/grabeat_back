@@ -42,13 +42,14 @@ class FoodCategory(models.Model):
 
 
 class FoodItem(models.Model):
+
     METRICES = (
         ("Ml", "Ml"),
         ("Qtr", "Qtr"),
         ("Half", "Half"),
         ("Full", "Full"),
-        ("1_Glass", "1_Glass"),
-        ("1_Bootle", "1_Bottle"),
+        ("1 Glass", "1 Glass"),
+        ("1 Bootle", "1 Bottle"),
     )
 
     DRINK_TYPE = (
@@ -76,6 +77,7 @@ class FoodItem(models.Model):
 
 
 class DrinkItem(models.Model):
+
     DRINK_TYPE = (
         ("Hard Drink", "Hard Drink"),
         ("Soft Drink", "Soft Drink"),
