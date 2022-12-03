@@ -551,7 +551,9 @@ def submitcart(request):
                         calc -= float(int(data["qty"]) * 1)
                         dp.quantity = calc
                     else:
-                        pass
+                        calc = dp.quantity
+                        calc -= 1
+                        dp.quantity = calc
                     dp.save()
                 except:
                     pass
