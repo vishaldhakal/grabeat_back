@@ -514,7 +514,7 @@ def submitcart(request):
                         calc -= int(data["qty"]) * 1000
                         dp.quantity = calc
                     else:
-                        if foodi.drink_metric == "1 Glass":
+                        if foodi.drink_metric == "Glass":
 
                             if foodi.type_of_drink == "Beer":
                                 calc = dp.quantity
