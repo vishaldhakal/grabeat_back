@@ -512,7 +512,8 @@ def submitcart(request):
                             )
                         calc -= int(data["qty"]) * 1000
                         dp.quantity = calc
-                    elif foodi.drink_metric == "1 Glass":
+
+                    elif foodi.drink_metric == "1_Glass":
                         if foodi.drink_type == "Beer":
                             calc = dp.quantity
                             if (float(data["qty"]) * 0.5) > calc:
@@ -540,7 +541,7 @@ def submitcart(request):
                             calc -= float(int(data["qty"]) * 250)
                             dp.quantity = calc
 
-                    elif foodi.drink_metric == "1 Bottle":
+                    elif foodi.drink_metric == "1_Bottle":
                         calc = dp.quantity
                         if (int(data["qty"]) * 1) > calc:
                             ordee.delete()

@@ -47,8 +47,8 @@ class FoodItem(models.Model):
         ("Qtr", "Qtr"),
         ("Half", "Half"),
         ("Full", "Full"),
-        ("1 Glass", "1 Glass"),
-        ("1 Bootle", "1 Bottle"),
+        ("1_Glass", "1_Glass"),
+        ("1_Bootle", "1_Bottle"),
     )
 
     DRINK_TYPE = (
