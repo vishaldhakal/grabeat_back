@@ -24,6 +24,7 @@ class Purchase(models.Model):
         ("Ml", "Ml"),
         ("Ltr", "Ltr"),
         ("Kg", "Kg"),
+        ("mg", "mg"),
         ("Packets", "Packets"),
     )
 
@@ -31,7 +32,7 @@ class Purchase(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     payment_type = models.CharField(max_length=500, default="Cash")
-    quantity = models.IntegerField()
+    quantity = models.FloatField()
     metric = models.CharField(max_length=100, default="Kg", choices=METRICES)
     price = models.IntegerField()
     purchase_bill = models.FileField(blank=True)
