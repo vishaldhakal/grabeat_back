@@ -512,12 +512,10 @@ def submitcart(request):
                             )
                         calc -= int(data["qty"]) * 1000
                         dp.quantity = calc
-                    elif foodi.drink_metric == "1 Glass" and (
-                        foodi.drink_type == "Beer" or foodi.drink_type == "Soft Drink"
-                    ):
+                    elif foodi.drink_metric == "1 Glass":
                         if foodi.drink_type == "Beer":
                             calc = dp.quantity
-                            if (int(data["qty"]) * 0.5) > calc:
+                            if (float(data["qty"]) * 0.5) > calc:
                                 ordee.delete()
                                 return JsonResponse(
                                     {
@@ -526,7 +524,7 @@ def submitcart(request):
                                     },
                                     status=status.HTTP_403_FORBIDDEN,
                                 )
-                            calc -= int(data["qty"]) * 0.5
+                            calc -= float(float(data["qty"]) * 0.5)
                             dp.quantity = calc
                         else:
                             calc = dp.quantity
@@ -539,12 +537,10 @@ def submitcart(request):
                                     },
                                     status=status.HTTP_403_FORBIDDEN,
                                 )
-                            calc -= int(data["qty"]) * 250
+                            calc -= float(int(data["qty"]) * 250)
                             dp.quantity = calc
 
-                    elif (
-                        foodi.drink_metric == "1 Bottle" and foodi.drink_type == "Beer"
-                    ):
+                    elif foodi.drink_metric == "1 Bottle":
                         calc = dp.quantity
                         if (int(data["qty"]) * 1) > calc:
                             ordee.delete()
@@ -552,7 +548,7 @@ def submitcart(request):
                                 {"error": foodi.name + " Not Available in Inventory"},
                                 status=status.HTTP_403_FORBIDDEN,
                             )
-                        calc -= int(data["qty"]) * 1
+                        calc -= float(int(data["qty"]) * 1)
                         dp.quantity = calc
                     else:
                         pass
