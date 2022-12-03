@@ -47,6 +47,14 @@ class FoodItem(models.Model):
         ("Qtr", "Qtr"),
         ("Half", "Half"),
         ("Full", "Full"),
+        ("1 Glass", "1 Glass"),
+        ("1 Bootle", "1 Bottle"),
+    )
+
+    DRINK_TYPE = (
+        ("Hard Drink", "Hard Drink"),
+        ("Soft Drink", "Soft Drink"),
+        ("Beer", "Beer"),
     )
 
     category = models.ManyToManyField(FoodCategory)
@@ -54,6 +62,9 @@ class FoodItem(models.Model):
     thumbnail_image = models.FileField()
     price = models.IntegerField()
     is_a_drink = models.BooleanField(default=False)
+    type_of_drink = models.CharField(
+        max_length=100, choices=DRINK_TYPE, default="Soft Drink"
+    )
     drink_quantity = models.IntegerField(default=0)
     drink_metric = models.CharField(max_length=400, default="Ml", choices=METRICES)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
@@ -65,10 +76,17 @@ class FoodItem(models.Model):
 
 
 class DrinkItem(models.Model):
+    DRINK_TYPE = (
+        ("Hard Drink", "Hard Drink"),
+        ("Soft Drink", "Soft Drink"),
+        ("Beer", "Beer"),
+    )
+
     name = models.CharField(max_length=500)
     thumbnail_image = models.FileField()
     is_a_drink = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    type_of_drink = models.CharField(max_length=100, choices=DRINK_TYPE, blank=True)
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
 
     def __str__(self):
@@ -84,7 +102,9 @@ def create_drink(sender, instance=None, created=False, **kwargs):
                 pass
             else:
                 DrinkItem.objects.create(
-                    name=instance.name, thumbnail_image=instance.thumbnail_image
+                    name=instance.name,
+                    thumbnail_image=instance.thumbnail_image,
+                    type_of_drink=instance.type_of_drink,
                 )
 
 
