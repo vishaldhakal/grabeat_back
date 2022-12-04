@@ -95,21 +95,6 @@ class DrinkItem(models.Model):
         return self.name
 
 
-@receiver(post_save, sender=FoodItem)
-def create_drink(sender, instance=None, created=False, **kwargs):
-    if created:
-        if instance.is_a_drink:
-            check = DrinkItem.objects.filter(name=instance.name)
-            if check.exists():
-                pass
-            else:
-                DrinkItem.objects.create(
-                    name=instance.name,
-                    thumbnail_image=instance.thumbnail_image,
-                    type_of_drink=instance.type_of_drink,
-                )
-
-
 class OrderItem(models.Model):
 
     ORDER_STATUS = (

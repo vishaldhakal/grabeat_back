@@ -6,6 +6,7 @@ from .models import (
     Stockout,
     DrinksPurchase,
     DrinksStock,
+    Expenses,
 )
 from admin_totals.admin import ModelAdminTotals
 from django.db.models import Sum, Avg
@@ -14,7 +15,7 @@ admin.site.register(Supplier)
 admin.site.register(Ingredient)
 admin.site.register(Stockout)
 admin.site.register(DrinksPurchase)
-admin.site.register(DrinksStock)
+admin.site.register(Expenses)
 
 
 @admin.register(Purchase)
@@ -38,3 +39,16 @@ class PurchaseAdmin(ModelAdminTotals, admin.ModelAdmin):
 
     class Meta:
         model = Purchase
+
+
+@admin.register(DrinksStock)
+class DrinksStockAdmin(admin.ModelAdmin):
+    list_display = (
+        "drinkk",
+        "quantity",
+        "metric",
+    )
+    list_filter = ("drinkk__name",)
+
+    class Meta:
+        model = DrinksStock

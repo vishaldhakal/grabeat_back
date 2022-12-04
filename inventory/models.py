@@ -1,5 +1,5 @@
 from django.db import models
-from api.models import DrinkItem
+from api.models import DrinkItem, FoodItem
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
@@ -53,10 +53,20 @@ class Stockout(models.Model):
         return self.ingredient.ingredient_name
 
 
+class Expenses(models.Model):
+    expense_title = models.CharField(max_length=500)
+    amount = models.FloatField(default=0)
+    date = models.DateTimeField(auto_now_add=True)
+    remarks = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.expense_title
+
+
 class DrinksPurchase(models.Model):
     METRICES = (
         ("Ml", "Ml"),
-        ("Beer Bootles", "Beer Bootles"),
+        ("Beer Bottles", "Beer Bottles"),
         ("Soft Drink Bottles [0.5 Ltr]", "Soft Drink Bottles [0.5 Ltr]"),
         ("Soft Drink Bottles [1 Ltr]", "Soft Drink Bottles [1 Ltr]"),
         ("Soft Drink Bottles [1.5 Ltr]", "Soft Drink Bottles [1.5 Ltr]"),
@@ -80,8 +90,7 @@ class DrinksPurchase(models.Model):
 class DrinksStock(models.Model):
     METRICES = (
         ("Ml", "Ml"),
-        ("Beer Bootles", "Beer Bootles"),
-        ("Beer Bootles", "Beer Bootles"),
+        ("Beer Bottles", "Beer Bottles"),
     )
 
     drinkk = models.ForeignKey(DrinkItem, on_delete=models.CASCADE)
@@ -90,6 +99,55 @@ class DrinksStock(models.Model):
 
     def __str__(self):
         return self.drinkk.name
+
+
+@receiver(post_save, sender=FoodItem)
+def create_drink(sender, instance=None, created=False, **kwargs):
+    if created:
+        if instance.is_a_drink:
+            check = DrinkItem.objects.filter(name=instance.name)
+            if check.exists():
+                vv = check[0]
+                check = DrinksStock.objects.filter(drinkk=vv)
+                if check.exists():
+                    pass
+                else:
+                    if vv.type_of_drink == "Beer":
+                        DrinksStock.objects.create(
+                            drinkk=vv,
+                            quantity=0,
+                            metric="Ml",
+                        )
+                    else:
+                        DrinksStock.objects.create(
+                            drinkk=vv,
+                            quantity=0,
+                            metric="Ml",
+                        )
+            else:
+                DrinkItem.objects.create(
+                    name=instance.name,
+                    thumbnail_image=instance.thumbnail_image,
+                    type_of_drink=instance.type_of_drink,
+                )
+
+                vv = DrinkItem.objects.get(name=instance.name)
+                check = DrinksStock.objects.filter(drinkk=vv)
+                if check.exists():
+                    pass
+                else:
+                    if vv.type_of_drink == "Beer":
+                        DrinksStock.objects.create(
+                            drinkk=vv,
+                            quantity=0,
+                            metric="Beer Bottles",
+                        )
+                    else:
+                        DrinksStock.objects.create(
+                            drinkk=vv,
+                            quantity=0,
+                            metric="Ml",
+                        )
 
 
 @receiver(post_save, sender=DrinksPurchase)
@@ -108,7 +166,7 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
                 add_qty = 1500 * instance.quantity
             elif instance.metric == "Soft Drink Bottles [2 Ltr]":
                 add_qty = 2000 * instance.quantity
-            elif instance.metric == "Beer Bootles":
+            elif instance.metric == "Beer Bottles":
                 add_qty = instance.quantity
             else:
                 add_qty = instance.quantity
@@ -119,7 +177,7 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
             aaa.quantity = newquantity
             aaa.save()
         else:
-            if instance.metric == "Ml" or instance.metric == "Beer Bootles":
+            if instance.metric == "Ml" or instance.metric == "Beer Bottles":
                 DrinksStock.objects.create(
                     drinkk=instance.drinkk,
                     quantity=instance.quantity,
