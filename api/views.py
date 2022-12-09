@@ -36,6 +36,7 @@ from .serializers import (
     VatSerializer,
     TaxSerializer,
     PaymentSerializer,
+    FoodItemSmallSerializer,
     PaymentSmallSerializer,
 )
 from inventory.serializers import (
@@ -76,10 +77,15 @@ def foodlists(request):
         fooditems = FoodItem.objects.filter(name__contains=queryy).order_by("-price")
 
     food_serializer = FoodItemSerializer(fooditems, many=True)
+    food_serializer2 = FoodItemSmallSerializer(fooditems, many=True)
     categoryitems = FoodCategory.objects.all()
     categoryitems_serializer = FoodCategorySerializer(categoryitems, many=True)
     return Response(
-        {"menu": food_serializer.data, "categories": categoryitems_serializer.data}
+        {
+            "menu": food_serializer.data,
+            "categories": categoryitems_serializer.data,
+            "menulists": food_serializer2.data,
+        }
     )
 
 

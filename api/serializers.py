@@ -86,6 +86,16 @@ class FoodItemSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class FoodItemSmallSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = [
+            "id",
+            "name",
+        ]
+        model = models.FoodItem
+        depth = 1
+
+
 class OrderItemSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
