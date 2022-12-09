@@ -116,7 +116,11 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return (
-            self.no_of_items + " " + self.food_item.name + " by " + self.user.username
+            str(self.no_of_items)
+            + " "
+            + self.food_item.name
+            + " by "
+            + self.user.username
         )
 
     def totp(self):
@@ -139,7 +143,7 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order_note = models.TextField()
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
-    orderitems = models.ManyToManyField(OrderItem)
+    orderitems = models.ManyToManyField(OrderItem, related_name="orderitems")
     status = models.CharField(
         max_length=400, choices=ORDER_STATUS, default="Order Placed"
     )

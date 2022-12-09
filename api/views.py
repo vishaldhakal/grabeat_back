@@ -432,7 +432,11 @@ def cancleorder(request, id):
 @permission_classes([IsAuthenticated])
 def cancleorderitem(request, id):
     itemm = OrderItem.objects.get(id=int(id))
+    orderss = itemm.orderitems.all()
+    aaa = orderss[0]
     itemm.status = "Order Canceled"
+    aaa.orderitems.remove(itemm)
+    aaa.save()
     itemm.save()
     if itemm.food_item.is_a_drink:
         foodi = itemm.food_item
