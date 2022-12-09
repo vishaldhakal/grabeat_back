@@ -467,6 +467,10 @@ def cancleorderitem(request, id):
             pass
     else:
         pass
+
+    if aaa.orderitems.count() == 0:
+        aaa.status = "Order Canceled"
+        aaa.save()
     return JsonResponse(
         {"success": "Order Item Canceled Successfull"},
         status=status.HTTP_201_CREATED,
