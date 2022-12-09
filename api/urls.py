@@ -33,6 +33,7 @@ from .views import (
     all_report,
     purchases_report,
     drinks_report,
+    cancleorderitem,
     paymentss_report,
     CustomAuthToken,
 )
@@ -54,6 +55,7 @@ urlpatterns = [
     path("complete-order/<int:id>/", completeorder),
     path("print-kot/<int:id>/", kot_printed),
     path("cancel-order/<int:id>/", cancleorder),
+    path("cancel-order-item/<int:id>/", cancleorderitem),
     path("payment-single/<int:id>/", paymentorderlistsingle),
     path("payorders/", paymentt),
     path("tablelists/", tablelists),

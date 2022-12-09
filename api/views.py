@@ -430,6 +430,48 @@ def cancleorder(request, id):
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
+def cancleorderitem(request, id):
+    itemm = OrderItem.objects.get(id=int(id))
+    itemm.status = "Order Canceled"
+    itemm.save()
+    if itemm.food_item.is_a_drink:
+        foodi = itemm.food_item
+        try:
+            drinkkk = DrinkItem.objects.get(name=foodi.name)
+            dpp = DrinksStock.objects.filter(drinkk=drinkkk)
+            dp = dpp[0]
+            if foodi.drink_metric == "Ml":
+                calc = dp.quantity
+                calc += int(itemm.no_of_items) * foodi.drink_quantity
+                dp.quantity = calc
+            elif foodi.drink_metric == "Qtr":
+                calc = dp.quantity
+                calc += int(itemm.no_of_items) * 250
+                dp.quantity = calc
+            elif foodi.drink_metric == "Half":
+                calc = dp.quantity
+                calc += int(itemm.no_of_items) * 500
+                dp.quantity = calc
+            elif foodi.drink_metric == "Full":
+                calc = dp.quantity
+                calc += int(itemm.no_of_items) * 1000
+                dp.quantity = calc
+            else:
+                pass
+            dp.save()
+        except:
+            pass
+    else:
+        pass
+    return JsonResponse(
+        {"success": "Order Item Canceled Successfull"},
+        status=status.HTTP_201_CREATED,
+    )
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def cancleapyment(request, id):
     datas = JSONParser().parse(request)
     tablee = Table.objects.get(id=id)
