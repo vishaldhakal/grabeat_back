@@ -16,13 +16,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
-    "wordpress.dhakalvishal.com.np",
-    "134.122.44.223",
-    ".dhakalvishal.com.np",
+    "146.190.80.14",
+    ".grihamfood.com",
     "grabeatnp.herokuapp.com",
     "grabeat-back-6tg3y.ondigitalocean.app",
     "lionfish-app-hpl8l.ondigitalocean.app",
-    "51d8-103-186-197-251.ngrok.io",
 ]
 
 # Application definition
