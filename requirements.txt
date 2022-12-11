@@ -1,7 +1,7 @@
 admin-totals==1.0.1
 appdirs==1.4.4
 asgiref==3.4.1
-backports.zoneinfo==0.2.1
+backports.zoneinfo==0.2.1;python_version<"3.9"
 black==21.7b0
 certifi==2022.9.24
 charset-normalizer==2.1.1
