@@ -85,7 +85,7 @@ DATABASES = {
     }
 }
 
-DATABASES = {
+""" DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "griham",
@@ -94,7 +94,7 @@ DATABASES = {
         "HOST": "localhost",
         "PORT": "",
     }
-}
+} """
 
 
 # Password validation
