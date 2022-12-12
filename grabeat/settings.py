@@ -16,7 +16,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
-    "146.190.80.14",
+    "139.59.228.221",
     ".grihamfood.com",
     "grabeatnp.herokuapp.com",
     "grabeat-back-6tg3y.ondigitalocean.app",
