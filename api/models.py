@@ -56,6 +56,7 @@ class FoodItem(models.Model):
         ("Hard Drink", "Hard Drink"),
         ("Soft Drink", "Soft Drink"),
         ("Beer", "Beer"),
+        ("Wine", "Wine"),
     )
 
     category = models.ManyToManyField(FoodCategory)
@@ -85,6 +86,7 @@ class DrinkItem(models.Model):
         ("Hard Drink", "Hard Drink"),
         ("Soft Drink", "Soft Drink"),
         ("Beer", "Beer"),
+        ("Wine", "Wine"),
     )
 
     name = models.CharField(max_length=500)
