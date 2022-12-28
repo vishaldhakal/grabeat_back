@@ -410,7 +410,29 @@ def cancleorder(request, id):
                     calc += int(itemm.no_of_items) * 1000
                     dp.quantity = calc
                 else:
-                    pass
+                    if foodi.drink_metric == "Glass":
+                        if foodi.type_of_drink == "Beer":
+                            calc = dp.quantity
+                            calc += float(float(dp.qunatity) * 0.5)
+                            dp.quantity = calc
+                        elif foodi.type_of_drink == "Wine":
+                            calc = dp.quantity
+                            calc += float(int(dp.qunatity) * 150)
+                            dp.quantity = calc
+                        else:
+                            calc = dp.quantity
+                            calc += float(int(dp.qunatity) * 250)
+                            dp.quantity = calc
+
+                    else:
+                        if foodi.type_of_drink == "Wine":
+                            calc = dp.quantity
+                            calc += float(int(dp.qunatity) * 1000)
+                            dp.quantity = calc
+                        else:
+                            calc = dp.quantity
+                            calc += float(int(dp.qunatity) * 1)
+                            dp.quantity = calc
                 dp.save()
             except:
                 pass
@@ -461,7 +483,29 @@ def cancleorderitem(request, id):
                 calc += int(itemm.no_of_items) * 1000
                 dp.quantity = calc
             else:
-                pass
+                if foodi.drink_metric == "Glass":
+                    if foodi.type_of_drink == "Beer":
+                        calc = dp.quantity
+                        calc += float(float(dp.qunatity) * 0.5)
+                        dp.quantity = calc
+                    elif foodi.type_of_drink == "Wine":
+                        calc = dp.quantity
+                        calc += float(int(dp.qunatity) * 150)
+                        dp.quantity = calc
+                    else:
+                        calc = dp.quantity
+                        calc += float(int(dp.qunatity) * 250)
+                        dp.quantity = calc
+
+                else:
+                    if foodi.type_of_drink == "Wine":
+                        calc = dp.quantity
+                        calc += float(int(dp.qunatity) * 1000)
+                        dp.quantity = calc
+                    else:
+                        calc = dp.quantity
+                        calc += float(int(dp.qunatity) * 1)
+                        dp.quantity = calc
             dp.save()
         except:
             pass
@@ -571,7 +615,6 @@ def submitcart(request):
                         dp.quantity = calc
                     else:
                         if foodi.drink_metric == "Glass":
-
                             if foodi.type_of_drink == "Beer":
                                 calc = dp.quantity
                                 if (float(data["qty"]) * 0.5) > calc:
@@ -584,6 +627,19 @@ def submitcart(request):
                                         status=status.HTTP_403_FORBIDDEN,
                                     )
                                 calc -= float(float(data["qty"]) * 0.5)
+                                dp.quantity = calc
+                            elif foodi.type_of_drink == "Wine":
+                                calc = dp.quantity
+                                if (int(data["qty"]) * 150) > calc:
+                                    ordee.delete()
+                                    return JsonResponse(
+                                        {
+                                            "error": foodi.name
+                                            + " Not Available in Inventory"
+                                        },
+                                        status=status.HTTP_403_FORBIDDEN,
+                                    )
+                                calc -= float(int(data["qty"]) * 150)
                                 dp.quantity = calc
                             else:
                                 calc = dp.quantity
@@ -600,19 +656,32 @@ def submitcart(request):
                                 dp.quantity = calc
 
                         else:
-
-                            calc = dp.quantity
-                            if (int(data["qty"]) * 1) > calc:
-                                ordee.delete()
-                                return JsonResponse(
-                                    {
-                                        "error": foodi.name
-                                        + " Not Available in Inventory"
-                                    },
-                                    status=status.HTTP_403_FORBIDDEN,
-                                )
-                            calc -= float(int(data["qty"]) * 1)
-                            dp.quantity = calc
+                            if foodi.type_of_drink == "Wine":
+                                calc = dp.quantity
+                                if (int(data["qty"]) * 1000) > calc:
+                                    ordee.delete()
+                                    return JsonResponse(
+                                        {
+                                            "error": foodi.name
+                                            + " Not Available in Inventory"
+                                        },
+                                        status=status.HTTP_403_FORBIDDEN,
+                                    )
+                                calc -= float(int(data["qty"]) * 1000)
+                                dp.quantity = calc
+                            else:
+                                calc = dp.quantity
+                                if (int(data["qty"]) * 1) > calc:
+                                    ordee.delete()
+                                    return JsonResponse(
+                                        {
+                                            "error": foodi.name
+                                            + " Not Available in Inventory"
+                                        },
+                                        status=status.HTTP_403_FORBIDDEN,
+                                    )
+                                calc -= float(int(data["qty"]) * 1)
+                                dp.quantity = calc
 
                     dp.save()
                 except:
