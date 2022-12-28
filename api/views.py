@@ -74,11 +74,11 @@ def foodlists(request):
     queryy = request.GET.get("query", "All")
     fooditems = FoodItem.objects.all()
     if queryy != "All":
-        fooditems = FoodItem.objects.filter(name__contains=queryy).order_by("-price")
+        fooditems = FoodItem.objects.filter(name__contains=queryy).order_by("-name")
 
     food_serializer = FoodItemSerializer(fooditems, many=True)
     food_serializer2 = FoodItemSmallSerializer(fooditems, many=True)
-    categoryitems = FoodCategory.objects.all()
+    categoryitems = FoodCategory.objects.all().order_by("-name")
     categoryitems_serializer = FoodCategorySerializer(categoryitems, many=True)
     return Response(
         {

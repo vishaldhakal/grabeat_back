@@ -66,6 +66,7 @@ class Expenses(models.Model):
 class DrinksPurchase(models.Model):
     METRICES = (
         ("Ml", "Ml"),
+        ("Beer Bottles Small", "Beer Bottles Small"),
         ("Beer Bottles", "Beer Bottles"),
         ("Soft Drink Bottles [0.5 Ltr]", "Soft Drink Bottles [0.5 Ltr]"),
         ("Soft Drink Bottles [1 Ltr]", "Soft Drink Bottles [1 Ltr]"),
@@ -73,10 +74,18 @@ class DrinksPurchase(models.Model):
         ("Soft Drink Bottles [2 Ltr]", "Soft Drink Bottles [2 Ltr]"),
     )
 
+    PAYMENT_STATUS = (
+        ("Pending", "Pending"),
+        ("Paid", "Paid"),
+    )
+
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     drinkk = models.ForeignKey(DrinkItem, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     payment_type = models.CharField(max_length=500, default="Cash")
+    payment_status = models.CharField(
+        max_length=500, default="Paid", choices=PAYMENT_STATUS
+    )
     quantity = models.FloatField()
     metric = models.CharField(max_length=100, choices=METRICES, default="Ml")
     price = models.IntegerField()
@@ -168,6 +177,8 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
                 add_qty = 2000 * instance.quantity
             elif instance.metric == "Beer Bottles":
                 add_qty = instance.quantity
+            elif instance.metric == "Beer Bottles Small":
+                add_qty = instance.quantity * 0.5
             else:
                 add_qty = instance.quantity
 
@@ -191,6 +202,8 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
                     qty = 1000
                 elif instance.metric == "Soft Drink Bottles [1.5 Ltr]":
                     qty = 1500
+                elif instance.metric == "Beer Bottles Small":
+                    qty = 0.5
                 else:
                     qty = 2000
 
