@@ -72,6 +72,9 @@ class FoodItem(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     description = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ("-name",)
+
     def __str__(self):
         return self.name
 
