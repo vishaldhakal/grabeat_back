@@ -413,25 +413,24 @@ def cancleorder(request, id):
                     if foodi.drink_metric == "Glass":
                         if foodi.type_of_drink == "Beer":
                             calc = dp.quantity
-                            calc += float(float(dp.qunatity) * 0.5)
+                            calc += int(itemm.no_of_items) * foodi.drink_quantity * 0.5
                             dp.quantity = calc
                         elif foodi.type_of_drink == "Wine":
                             calc = dp.quantity
-                            calc += float(int(dp.qunatity) * 150)
+                            calc += int(itemm.no_of_items) * 150
                             dp.quantity = calc
                         else:
                             calc = dp.quantity
-                            calc += float(int(dp.qunatity) * 250)
+                            calc += int(itemm.no_of_items) * foodi.drink_quantity
                             dp.quantity = calc
-
                     else:
                         if foodi.type_of_drink == "Wine":
                             calc = dp.quantity
-                            calc += float(int(dp.qunatity) * 1000)
+                            calc += int(itemm.no_of_items) * 1000
                             dp.quantity = calc
                         else:
                             calc = dp.quantity
-                            calc += float(int(dp.qunatity) * 1)
+                            calc += int(itemm.no_of_items) * foodi.drink_quantity
                             dp.quantity = calc
                 dp.save()
             except:
@@ -486,25 +485,24 @@ def cancleorderitem(request, id):
                 if foodi.drink_metric == "Glass":
                     if foodi.type_of_drink == "Beer":
                         calc = dp.quantity
-                        calc += float(float(dp.qunatity) * 0.5)
+                        calc += int(itemm.no_of_items) * foodi.drink_quantity * 0.5
                         dp.quantity = calc
                     elif foodi.type_of_drink == "Wine":
                         calc = dp.quantity
-                        calc += float(int(dp.qunatity) * 150)
+                        calc += int(itemm.no_of_items) * 150
                         dp.quantity = calc
                     else:
                         calc = dp.quantity
-                        calc += float(int(dp.qunatity) * 250)
+                        calc += int(itemm.no_of_items) * foodi.drink_quantity
                         dp.quantity = calc
-
                 else:
                     if foodi.type_of_drink == "Wine":
                         calc = dp.quantity
-                        calc += float(int(dp.qunatity) * 1000)
+                        calc += int(itemm.no_of_items) * 1000
                         dp.quantity = calc
                     else:
                         calc = dp.quantity
-                        calc += float(int(dp.qunatity) * 1)
+                        calc += int(itemm.no_of_items) * foodi.drink_quantity
                         dp.quantity = calc
             dp.save()
         except:
