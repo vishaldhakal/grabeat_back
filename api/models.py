@@ -205,6 +205,9 @@ class Payment(models.Model):
     discount_type = models.CharField(
         max_length=400, choices=DISCOUNT_TYPE, default="Number"
     )
+    tender_amount = models.FloatField(default=0)
+    customer_name = models.CharField(max_length=400, blank=True)
+    pan_no = models.CharField(max_length=400, blank=True)
     discount = models.FloatField(default=0)
     discount_percentage = models.IntegerField(default=0)
     payment_method = models.ForeignKey(

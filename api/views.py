@@ -353,8 +353,10 @@ def paymentorderlistsingle(request, id):
     banksserializer = BankSerializer(bankss, many=True)
     pm = PaymentMethod.objects.all()
     pmserializer = PaymentMethodSerializer(pm, many=True)
+    latest_idd = Payment.objects.all().order_by("-id")[:1]
     return Response(
         {
+            "payment_id": latest_idd.id + 1,
             "order": ordersserializer.data,
             "banks": banksserializer.data,
             "payment_methods": pmserializer.data,
@@ -791,6 +793,9 @@ def paymentt(request):
             payment_method=paymentmethod,
             status="Paid",
             table=tablee,
+            tender_amount=datas["tender_amount"],
+            customer_name=datas["customer_name"],
+            pan_no=datas["pan_no"],
             discount_type=datas["discount_type"],
             discount=datas["discount_value"],
             discount_percentage=datas["discount_percentage"],
