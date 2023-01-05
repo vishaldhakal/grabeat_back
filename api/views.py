@@ -356,7 +356,7 @@ def paymentorderlistsingle(request, id):
     latest_idd = Payment.objects.all().order_by("-id")[:1]
     return Response(
         {
-            "payment_id": latest_idd.id + 1,
+            "payment_id": latest_idd[0].id + 1,
             "order": ordersserializer.data,
             "banks": banksserializer.data,
             "payment_methods": pmserializer.data,
