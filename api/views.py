@@ -13,6 +13,8 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from payments.models import PaymentMethod, Bank
+from inventory.models import Expenses
+from inventory.serializers import ExpensesSerializer
 from payments.serializers import PaymentMethodSerializer, BankSerializer
 from .models import (
     FoodItem,
@@ -159,11 +161,15 @@ def all_report(request):
     drinkstocks = DrinksStock.objects.all()
     drinkstocks_serializer = DrinkStockSerializer(drinkstocks, many=True)
 
+    allexps = Expenses.objects.all()
+    allexps_serializer = ExpensesSerializer(allexps, many=True)
+
     return Response(
         {
             "payments": payments_serializer.data,
             "drinks_purchase": drinkspurchase_serializer.data,
             "purchase": purchases_serializer.data,
+            "expenses": allexps_serializer.data,
             "drinkorders": drinkorders_serializer.data,
             "drinkstocks": drinkstocks_serializer.data,
         }
@@ -341,6 +347,56 @@ def paymentorderlists(request):
             "users": userss_serializer.data,
             "tables": tabless_serializer.data,
         }
+    )
+
+
+@api_view(["GET"])
+def paymentorderlistscredit(request):
+    okayy = []
+
+    table = request.GET.get("table", "All")
+    waiter = request.GET.get("waiter", "All")
+
+    tabless = Table.objects.all()
+
+    if table == "All":
+        tabless = Table.objects.all()
+    else:
+        tabless = Table.objects.filter(table_name=table)
+
+    for table in tabless:
+        if waiter == "All":
+            ordee = Order.objects.filter(status="Order Completed", table=table)
+        else:
+            usss = User.objects.get(username=waiter)
+            tabless = Table.objects.get(table_name=table)
+            ordee = Order.objects.filter(
+                status="Order Completed", table=table, user=usss
+            )
+
+        if ordee:
+            ordersserializer = OrderSerializer(ordee, many=True)
+            okayy.append(ordersserializer.data)
+
+    userss = User.objects.all()
+    userss_serializer = UserSerializer(userss, many=True)
+    tabless = Table.objects.all()
+    tabless_serializer = TableSerializer(tabless, many=True)
+
+    return Response(
+        {
+            "payments": okayy,
+            "users": userss_serializer.data,
+            "tables": tabless_serializer.data,
+        }
+    )
+
+
+def changecategory(request):
+
+    return JsonResponse(
+        {"success": "Category Updated Successfull"},
+        status=status.HTTP_201_CREATED,
     )
 
 

@@ -21,3 +21,10 @@ class PurchaseSerializer(serializers.ModelSerializer):
         fields = "__all__"
         model = models.Purchase
         depth = 1
+
+
+class ExpensesSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = models.Expenses
+        depth = 1

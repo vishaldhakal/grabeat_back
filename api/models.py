@@ -194,6 +194,7 @@ class Payment(models.Model):
         ("Unpaid", "Unpaid"),
         ("Paid", "Paid"),
         ("Payment Canceled", "Payment Canceled"),
+        ("Payment Credited", "Payment Credited"),
     )
     DISCOUNT_TYPE = (
         ("Percentage", "Percentage"),
