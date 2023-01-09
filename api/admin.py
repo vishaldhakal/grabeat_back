@@ -38,7 +38,7 @@ class OrderResource(resources.ModelResource):
 
 
 @admin.register(Payment)
-class PaymentAdmin(ImportExportActionModelAdmin, ModelAdminTotals, admin.ModelAdmin):
+class PaymentAdmin(ModelAdminTotals, admin.ModelAdmin):
     list_display = (
         "user",
         "created",
@@ -86,7 +86,7 @@ class OrderItemAdmin(admin.ModelAdmin):
         model = OrderItem
 
 
-class OrderAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
+class OrderAdmin(admin.ModelAdmin):
     resource_class = OrderResource
     list_display = (
         "__str__",
