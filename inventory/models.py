@@ -68,6 +68,7 @@ class DrinksPurchase(models.Model):
         ("Ml", "Ml"),
         ("Beer Bottles Small", "Beer Bottles Small"),
         ("Beer Bottles", "Beer Bottles"),
+        ("Apple Cider Bottles", "Apple Cider Bottles"),
         ("Soft Drink Bottles [0.5 Ltr]", "Soft Drink Bottles [0.5 Ltr]"),
         ("Soft Drink Bottles [1 Ltr]", "Soft Drink Bottles [1 Ltr]"),
         ("Soft Drink Bottles [1.5 Ltr]", "Soft Drink Bottles [1.5 Ltr]"),
@@ -100,6 +101,7 @@ class DrinksStock(models.Model):
     METRICES = (
         ("Ml", "Ml"),
         ("Beer Bottles", "Beer Bottles"),
+        ("Apple Cider Bottles", "Apple Cider Bottles"),
     )
 
     drinkk = models.ForeignKey(DrinkItem, on_delete=models.CASCADE)
@@ -125,7 +127,7 @@ def create_drink(sender, instance=None, created=False, **kwargs):
                         DrinksStock.objects.create(
                             drinkk=vv,
                             quantity=0,
-                            metric="Ml",
+                            metric="Beer Bottles",
                         )
                     else:
                         DrinksStock.objects.create(
@@ -179,6 +181,8 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
                 add_qty = instance.quantity
             elif instance.metric == "Beer Bottles Small":
                 add_qty = instance.quantity * 0.5
+            elif instance.metric == "Apple Cider Bottles":
+                add_qty = instance.quantity
             else:
                 add_qty = instance.quantity
 
@@ -188,7 +192,11 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
             aaa.quantity = newquantity
             aaa.save()
         else:
-            if instance.metric == "Ml" or instance.metric == "Beer Bottles":
+            if (
+                instance.metric == "Ml"
+                or instance.metric == "Beer Bottles"
+                or instance.metric == "Apple Cider Bottles"
+            ):
                 DrinksStock.objects.create(
                     drinkk=instance.drinkk,
                     quantity=instance.quantity,
