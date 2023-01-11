@@ -101,6 +101,7 @@ class DrinksStock(models.Model):
     METRICES = (
         ("Ml", "Ml"),
         ("Beer Bottles", "Beer Bottles"),
+        ("Beer Bottles Small", "Beer Bottles Small"),
         ("Apple Cider Bottles", "Apple Cider Bottles"),
     )
 
@@ -168,7 +169,6 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
         check = DrinksStock.objects.filter(drinkk=drinkk2)
 
         if check.exists():
-
             if instance.metric == "Soft Drink Bottles [0.5 Ltr]":
                 add_qty = 500 * instance.quantity
             elif instance.metric == "Soft Drink Bottles [1 Ltr]":
@@ -180,7 +180,7 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
             elif instance.metric == "Beer Bottles":
                 add_qty = instance.quantity
             elif instance.metric == "Beer Bottles Small":
-                add_qty = instance.quantity * 0.5
+                add_qty = instance.quantity
             elif instance.metric == "Apple Cider Bottles":
                 add_qty = instance.quantity
             else:
@@ -196,6 +196,7 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
                 instance.metric == "Ml"
                 or instance.metric == "Beer Bottles"
                 or instance.metric == "Apple Cider Bottles"
+                or instance.metric == "Beer Bottles Small"
             ):
                 DrinksStock.objects.create(
                     drinkk=instance.drinkk,
@@ -210,8 +211,6 @@ def create_drink_stock(sender, instance=None, created=False, **kwargs):
                     qty = 1000
                 elif instance.metric == "Soft Drink Bottles [1.5 Ltr]":
                     qty = 1500
-                elif instance.metric == "Beer Bottles Small":
-                    qty = 0.5
                 else:
                     qty = 2000
 

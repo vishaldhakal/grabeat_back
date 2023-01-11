@@ -457,15 +457,19 @@ def cancleorder(request, id):
                     dp.quantity = calc
                 elif foodi.drink_metric == "Qtr":
                     calc = dp.quantity
-                    calc += int(itemm.no_of_items) * 250
+                    calc += int(itemm.no_of_items) * 180
                     dp.quantity = calc
                 elif foodi.drink_metric == "Half":
                     calc = dp.quantity
-                    calc += int(itemm.no_of_items) * 500
+                    calc += int(itemm.no_of_items) * 350
                     dp.quantity = calc
                 elif foodi.drink_metric == "Full":
                     calc = dp.quantity
-                    calc += int(itemm.no_of_items) * 1000
+                    calc += int(itemm.no_of_items) * 750
+                    dp.quantity = calc
+                elif foodi.drink_metric == "Bootle Bottle Small":
+                    calc = dp.quantity
+                    calc += int(itemm.no_of_items) * 1
                     dp.quantity = calc
                 else:
                     if foodi.drink_metric == "Glass":
@@ -529,15 +533,19 @@ def cancleorderitem(request, id):
                 dp.quantity = calc
             elif foodi.drink_metric == "Qtr":
                 calc = dp.quantity
-                calc += int(itemm.no_of_items) * 250
+                calc += int(itemm.no_of_items) * 180
                 dp.quantity = calc
             elif foodi.drink_metric == "Half":
                 calc = dp.quantity
-                calc += int(itemm.no_of_items) * 500
+                calc += int(itemm.no_of_items) * 350
                 dp.quantity = calc
             elif foodi.drink_metric == "Full":
                 calc = dp.quantity
-                calc += int(itemm.no_of_items) * 1000
+                calc += int(itemm.no_of_items) * 750
+                dp.quantity = calc
+            elif foodi.drink_metric == "Bootle Bottle Small":
+                calc = dp.quantity
+                calc += int(itemm.no_of_items) * 1
                 dp.quantity = calc
             else:
                 if foodi.drink_metric == "Glass":
@@ -640,34 +648,44 @@ def submitcart(request):
                         dp.quantity = calc
                     elif foodi.drink_metric == "Qtr":
                         calc = dp.quantity
-                        if (int(data["qty"]) * 250) > calc:
+                        if (int(data["qty"]) * 180) > calc:
                             ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
                                 status=status.HTTP_403_FORBIDDEN,
                             )
-                        calc -= int(data["qty"]) * 250
+                        calc -= int(data["qty"]) * 180
                         dp.quantity = calc
                     elif foodi.drink_metric == "Half":
                         calc = dp.quantity
-                        if (int(data["qty"]) * 500) > calc:
+                        if (int(data["qty"]) * 375) > calc:
                             ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
                                 status=status.HTTP_403_FORBIDDEN,
                             )
-                        calc -= int(data["qty"]) * 500
+                        calc -= int(data["qty"]) * 375
                         dp.quantity = calc
 
                     elif foodi.drink_metric == "Full":
                         calc = dp.quantity
-                        if (int(data["qty"]) * 1000) > calc:
+                        if (int(data["qty"]) * 750) > calc:
                             ordee.delete()
                             return JsonResponse(
                                 {"error": foodi.name + " Not Available in Inventory"},
                                 status=status.HTTP_403_FORBIDDEN,
                             )
-                        calc -= int(data["qty"]) * 1000
+                        calc -= int(data["qty"]) * 750
+                        dp.quantity = calc
+                    elif foodi.drink_metric == "Bootle Bottle Small":
+                        calc = dp.quantity
+                        if (int(data["qty"]) * 1) > calc:
+                            ordee.delete()
+                            return JsonResponse(
+                                {"error": foodi.name + " Not Available in Inventory"},
+                                status=status.HTTP_403_FORBIDDEN,
+                            )
+                        calc -= int(data["qty"]) * 1
                         dp.quantity = calc
                     else:
                         if foodi.drink_metric == "Glass":

@@ -50,6 +50,7 @@ class FoodItem(models.Model):
         ("Full", "Full"),
         ("Glass", "Glass"),
         ("Bootle", "Bottle"),
+        ("Bootle Bottle Small", "Bootle Bottle Small"),
     )
 
     DRINK_TYPE = (
