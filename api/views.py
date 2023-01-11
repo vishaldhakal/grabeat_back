@@ -467,7 +467,7 @@ def cancleorder(request, id):
                     calc = dp.quantity
                     calc += int(itemm.no_of_items) * 750
                     dp.quantity = calc
-                elif foodi.drink_metric == "Bootle Bottle Small":
+                elif foodi.drink_metric == "Beer Bottle Small":
                     calc = dp.quantity
                     calc += int(itemm.no_of_items) * 1
                     dp.quantity = calc
@@ -543,7 +543,7 @@ def cancleorderitem(request, id):
                 calc = dp.quantity
                 calc += int(itemm.no_of_items) * 750
                 dp.quantity = calc
-            elif foodi.drink_metric == "Bootle Bottle Small":
+            elif foodi.drink_metric == "Beer Bottle Small":
                 calc = dp.quantity
                 calc += int(itemm.no_of_items) * 1
                 dp.quantity = calc
@@ -677,7 +677,7 @@ def submitcart(request):
                             )
                         calc -= int(data["qty"]) * 750
                         dp.quantity = calc
-                    elif foodi.drink_metric == "Bootle Bottle Small":
+                    elif foodi.drink_metric == "Beer Bottle Small":
                         calc = dp.quantity
                         if (int(data["qty"]) * 1) > calc:
                             ordee.delete()
