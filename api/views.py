@@ -192,7 +192,7 @@ class CustomPagination(PageNumberPagination):
 
 @api_view(["GET"])
 def paymentss_report(request):
-    paginationsize = request.GET.get("perpage", "50")
+    paginationsize = request.GET.get("perpage", "30")
     payments = Payment.objects.filter(status="Paid")
 
     paginator = CustomPagination()
