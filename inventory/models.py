@@ -56,7 +56,7 @@ class Stockout(models.Model):
 class Expenses(models.Model):
     expense_title = models.CharField(max_length=500)
     amount = models.FloatField(default=0)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=False)
     remarks = models.TextField(blank=True)
 
     def __str__(self):
