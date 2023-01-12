@@ -12,6 +12,7 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes,
 )
+from rest_framework.pagination import PageNumberPagination
 from payments.models import PaymentMethod, Bank
 from inventory.models import Expenses
 from inventory.serializers import ExpensesSerializer
@@ -52,6 +53,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 import json
+import math
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -176,14 +178,34 @@ def all_report(request):
     )
 
 
+class CustomPagination(PageNumberPagination):
+    def get_paginated_response(self, data, noo):
+        return Response(
+            {
+                "totalCount": self.page.paginator.count,
+                "totalPages": noo,
+                "dataPerpage": self.page_size,
+                "results": data,
+            }
+        )
+
+
 @api_view(["GET"])
 def paymentss_report(request):
+    paginationsize = request.GET.get("perpage", "50")
     payments = Payment.objects.filter(status="Paid")
-    payments_serializer = PaymentSmallSerializer(payments, many=True)
+
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data = payments.count()
+    no_of_pages = math.ceil(total_data / paginator.page_size)
+    result_page = paginator.paginate_queryset(payments, request)
+    serializer_cat = PaymentSmallSerializer(result_page, many=True)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
 
     return Response(
         {
-            "payments": payments_serializer.data,
+            "payments": final.data,
         }
     )
 
