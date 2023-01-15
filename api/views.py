@@ -306,7 +306,7 @@ def paymentlists_report(request):
     total_data = orders.count()
     no_of_pages = math.ceil(total_data / paginator.page_size)
     result_page = paginator.paginate_queryset(orders, request)
-    serializer_cat = PaymentSmallSerializer(result_page, many=True)
+    serializer_cat = PaymentSerializer(result_page, many=True)
     final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
 
     userss = User.objects.all()
