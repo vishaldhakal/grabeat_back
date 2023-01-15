@@ -248,6 +248,8 @@ def orderslists_report(request):
     table = request.GET.get("table", "All")
     waiter = request.GET.get("waiter", "All")
 
+    paginationsize = request.GET.get("perpage", "30")
+
     if (table == "All") & (waiter == "All"):
         orders = Order.objects.filter(status="Order Paid")
     elif (table == "All") & (waiter != "All"):
@@ -261,7 +263,14 @@ def orderslists_report(request):
         table = Table.objects.get(table_name=table)
         orders = Order.objects.filter(status="Order Paid", table=table, user=usss)
 
-    ordersserializer = OrderSerializer(orders, many=True)
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data = orders.count()
+    no_of_pages = math.ceil(total_data / paginator.page_size)
+    result_page = paginator.paginate_queryset(orders, request)
+    serializer_cat = OrderSerializer(result_page, many=True)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+
     subtotal = []
     for order in orders:
         subtotal.append(order.ordertotal())
@@ -272,7 +281,7 @@ def orderslists_report(request):
     tabless_serializer = TableSerializer(tabless, many=True)
     return Response(
         {
-            "orderdata": ordersserializer.data,
+            "orderdata": final.data,
             "subtotal": subtotal,
             "users": userss_serializer.data,
             "tables": tabless_serializer.data,
