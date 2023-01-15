@@ -286,6 +286,8 @@ def paymentlists_report(request):
     table = request.GET.get("table", "All")
     waiter = request.GET.get("waiter", "All")
 
+    paginationsize = request.GET.get("perpage", "30")
+
     if (table == "All") & (waiter == "All"):
         orders = Payment.objects.filter(status="Paid")
     elif (table == "All") & (waiter != "All"):
@@ -299,14 +301,21 @@ def paymentlists_report(request):
         table = Table.objects.get(table_name=table)
         orders = Payment.objects.filter(status="Paid", user=usss, table=table)
 
-    ordersserializer = PaymentSerializer(orders, many=True)
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data = orders.count()
+    no_of_pages = math.ceil(total_data / paginator.page_size)
+    result_page = paginator.paginate_queryset(orders, request)
+    serializer_cat = PaymentSmallSerializer(result_page, many=True)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+
     userss = User.objects.all()
     userss_serializer = UserSerializer(userss, many=True)
     tabless = Table.objects.all()
     tabless_serializer = TableSerializer(tabless, many=True)
     return Response(
         {
-            "payments": ordersserializer.data,
+            "payments": final.data,
             "users": userss_serializer.data,
             "tables": tabless_serializer.data,
         }
