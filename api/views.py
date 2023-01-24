@@ -251,7 +251,7 @@ def paymentss_report(request):
     start_date = request.GET.get("start_date", today)
     end_date = request.GET.get("end_date", today)
     payments = Payment.objects.filter(
-        status="Paid", created__range=(start_date, end_date)
+        status="Paid", created__gte=start_date, created__lte=end_date
     ).order_by("-created")
 
     """ paginator = CustomPagination()
