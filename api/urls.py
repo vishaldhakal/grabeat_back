@@ -35,6 +35,10 @@ from .views import (
     drinks_report,
     cancleorderitem,
     paymentss_report,
+    misc_expense_report,
+    drink_orders_report,
+    drink_purchases_report,
+    drink_stocks_report,
     CustomAuthToken,
 )
 
@@ -43,6 +47,10 @@ urlpatterns = [
     path("all-report/", all_report),
     path("purchase-report/", purchases_report),
     path("payments-report/", paymentss_report),
+    path("expense-report/", misc_expense_report),
+    path("drink-orders-report/", drink_orders_report),
+    path("drink-purchase-report/", drink_purchases_report),
+    path("drink-stocks-report/", drink_stocks_report),
     path("drinks-report/", drinks_report),
     path("payment-report/", paymentlists_report),
     path("foodlists/", foodlists),

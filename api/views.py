@@ -224,8 +224,28 @@ def all_report(request):
 
 
 @api_view(["GET"])
+def misc_expense_report(request):
+    paginationsize = request.GET.get("perpage", "10")
+    allexps = Expenses.objects.all()
+
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data = allexps.count()
+    no_of_pages = math.ceil(total_data / paginator.page_size)
+    result_page = paginator.paginate_queryset(allexps, request)
+    serializer_cat = ExpensesSerializer(result_page, many=True)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+
+    return Response(
+        {
+            "expenses": final.data,
+        }
+    )
+
+
+@api_view(["GET"])
 def paymentss_report(request):
-    paginationsize = request.GET.get("perpage", "30")
+    paginationsize = request.GET.get("perpage", "10")
     payments = Payment.objects.filter(status="Paid")
 
     paginator = CustomPagination()
@@ -246,12 +266,83 @@ def paymentss_report(request):
 @api_view(["GET"])
 def purchases_report(request):
 
+    paginationsize = request.GET.get("perpage", "10")
     purchases = Purchase.objects.all()
-    purchases_serializer = PurchaseSerializer(purchases, many=True)
+
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data = purchases.count()
+    no_of_pages = math.ceil(total_data / paginator.page_size)
+    result_page = paginator.paginate_queryset(purchases, request)
+    serializer_cat = PurchaseSerializer(result_page, many=True)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
 
     return Response(
         {
-            "purchase": purchases_serializer.data,
+            "purchase": final.data,
+        }
+    )
+
+
+@api_view(["GET"])
+def drink_purchases_report(request):
+
+    paginationsize = request.GET.get("perpage", "10")
+    drinkspurchase = DrinksPurchase.objects.all()
+
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data = drinkspurchase.count()
+    no_of_pages = math.ceil(total_data / paginator.page_size)
+    result_page = paginator.paginate_queryset(drinkspurchase, request)
+    serializer_cat = DrinkPurchaseSerializer(result_page, many=True)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+
+    return Response(
+        {
+            "drink_purchase": final.data,
+        }
+    )
+
+
+@api_view(["GET"])
+def drink_orders_report(request):
+
+    paginationsize = request.GET.get("perpage", "10")
+    drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True)
+
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data = drinkorders.count()
+    no_of_pages = math.ceil(total_data / paginator.page_size)
+    result_page = paginator.paginate_queryset(drinkorders, request)
+    serializer_cat = OrderItemSerializer(result_page, many=True)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+
+    return Response(
+        {
+            "drinkorders": final.data,
+        }
+    )
+
+
+@api_view(["GET"])
+def drink_stocks_report(request):
+
+    paginationsize = request.GET.get("perpage", "10")
+    drinkstocks = DrinksStock.objects.all()
+
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data = drinkstocks.count()
+    no_of_pages = math.ceil(total_data / paginator.page_size)
+    result_page = paginator.paginate_queryset(drinkstocks, request)
+    serializer_cat = DrinkStockSerializer(result_page, many=True)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+
+    return Response(
+        {
+            "drinkstocks": final.data,
         }
     )
 
