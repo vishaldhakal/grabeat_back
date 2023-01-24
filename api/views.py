@@ -146,38 +146,6 @@ def orderslists(request):
     )
 
 
-@api_view(["GET"])
-def all_report(request):
-    payments = Payment.objects.filter(status="Paid")
-    payments_serializer = PaymentSmallSerializer(payments, many=True)
-
-    drinkspurchase = DrinksPurchase.objects.all()
-    drinkspurchase_serializer = DrinkPurchaseSerializer(drinkspurchase, many=True)
-
-    purchases = Purchase.objects.all()
-    purchases_serializer = PurchaseSerializer(purchases, many=True)
-
-    drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True)
-    drinkorders_serializer = OrderItemSerializer(drinkorders, many=True)
-
-    drinkstocks = DrinksStock.objects.all()
-    drinkstocks_serializer = DrinkStockSerializer(drinkstocks, many=True)
-
-    allexps = Expenses.objects.all()
-    allexps_serializer = ExpensesSerializer(allexps, many=True)
-
-    return Response(
-        {
-            "payments": payments_serializer.data,
-            "drinks_purchase": drinkspurchase_serializer.data,
-            "purchase": purchases_serializer.data,
-            "expenses": allexps_serializer.data,
-            "drinkorders": drinkorders_serializer.data,
-            "drinkstocks": drinkstocks_serializer.data,
-        }
-    )
-
-
 class CustomPagination(PageNumberPagination):
     def get_paginated_response(self, data, noo):
         return Response(
@@ -188,6 +156,71 @@ class CustomPagination(PageNumberPagination):
                 "results": data,
             }
         )
+
+
+@api_view(["GET"])
+def all_report(request):
+    paginationsize = request.GET.get("perpage", "10")
+
+    payments = Payment.objects.filter(status="Paid")
+
+    drinkspurchase = DrinksPurchase.objects.all()
+
+    purchases = Purchase.objects.all()
+
+    drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True)
+    drinkorders_serializer = OrderItemSerializer(drinkorders, many=True)
+
+    drinkstocks = DrinksStock.objects.all()
+    drinkstocks_serializer = DrinkStockSerializer(drinkstocks, many=True)
+
+    allexps = Expenses.objects.all()
+    allexps_serializer = ExpensesSerializer(allexps, many=True)
+
+    paginator = CustomPagination()
+    paginator.page_size = int(paginationsize)
+    total_data1 = payments.count()
+    total_data2 = drinkspurchase.count()
+    total_data3 = purchases.count()
+    total_data4 = drinkorders.count()
+    total_data5 = allexps.count()
+
+    no_of_pages1 = math.ceil(total_data1 / paginator.page_size)
+    no_of_pages2 = math.ceil(total_data2 / paginator.page_size)
+    no_of_pages3 = math.ceil(total_data3 / paginator.page_size)
+    no_of_pages4 = math.ceil(total_data4 / paginator.page_size)
+    no_of_pages5 = math.ceil(total_data5 / paginator.page_size)
+
+    result_page1 = paginator.paginate_queryset(payments, request)
+    result_page2 = paginator.paginate_queryset(drinkspurchase, request)
+    result_page3 = paginator.paginate_queryset(purchases, request)
+    result_page4 = paginator.paginate_queryset(drinkorders, request)
+    result_page5 = paginator.paginate_queryset(allexps, request)
+
+    payments_serializer = PaymentSmallSerializer(result_page1, many=True)
+    drinkspurchase_serializer = DrinkPurchaseSerializer(result_page2, many=True)
+    purchases_serializer = PurchaseSerializer(result_page3, many=True)
+    drinkorders_serializer = OrderItemSerializer(result_page4, many=True)
+    allexps_serializer = ExpensesSerializer(result_page5, many=True)
+
+    final1 = paginator.get_paginated_response(payments_serializer.data, no_of_pages1)
+    final2 = paginator.get_paginated_response(
+        drinkspurchase_serializer.data, no_of_pages2
+    )
+    final3 = paginator.get_paginated_response(purchases_serializer.data, no_of_pages3)
+    final4 = paginator.get_paginated_response(drinkorders_serializer.data, no_of_pages4)
+    final5 = paginator.get_paginated_response(allexps_serializer.data, no_of_pages5)
+
+    return Response(
+        {
+            "payments": final1.data,
+            "drinks_purchase": final2.data,
+            "purchase": final3.data,
+            "expenses": final5.data,
+            "drinkorders": final4.data,
+            "drinkstocks": drinkstocks_serializer.data,
+        }
+    )
 
 
 @api_view(["GET"])
