@@ -246,7 +246,7 @@ def misc_expense_report(request):
 
 @api_view(["GET"])
 def paymentss_report(request):
-    paginationsize = request.GET.get("perpage", "10")
+    """paginationsize = request.GET.get("perpage", "10")"""
     today = date.today()
     start_date = request.GET.get("start_date", today)
     end_date = request.GET.get("end_date", today)
@@ -254,17 +254,17 @@ def paymentss_report(request):
         status="Paid", created__range=(start_date, end_date)
     ).order_by("-created")
 
-    paginator = CustomPagination()
+    """ paginator = CustomPagination()
     paginator.page_size = int(paginationsize)
     total_data = payments.count()
     no_of_pages = math.ceil(total_data / paginator.page_size)
     result_page = paginator.paginate_queryset(payments, request)
-    serializer_cat = PaymentSmallSerializer(result_page, many=True)
-    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages) """
+    serializer_cat = PaymentSmallSerializer(payments, many=True)
 
     return Response(
         {
-            "payments": final.data,
+            "payments": serializer_cat.data,
         }
     )
 
