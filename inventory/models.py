@@ -30,7 +30,7 @@ class Purchase(models.Model):
 
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
     payment_type = models.CharField(max_length=500, default="Cash")
     quantity = models.FloatField()
     metric = models.CharField(max_length=100, default="Kg", choices=METRICES)
@@ -44,7 +44,7 @@ class Purchase(models.Model):
 
 class Stockout(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
     quantity = models.IntegerField()
     metric = models.CharField(max_length=100)
     remarks = models.TextField(blank=True)
@@ -56,7 +56,7 @@ class Stockout(models.Model):
 class Expenses(models.Model):
     expense_title = models.CharField(max_length=500)
     amount = models.FloatField(default=0)
-    date = models.DateTimeField(auto_now_add=False)
+    date = models.DateField(auto_now_add=False)
     remarks = models.TextField(blank=True)
 
     def __str__(self):
@@ -82,7 +82,7 @@ class DrinksPurchase(models.Model):
 
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     drinkk = models.ForeignKey(DrinkItem, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
     payment_type = models.CharField(max_length=500, default="Cash")
     payment_status = models.CharField(
         max_length=500, default="Paid", choices=PAYMENT_STATUS
