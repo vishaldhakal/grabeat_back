@@ -10,8 +10,8 @@ from payments.models import PaymentMethod, Bank
 
 class Table(models.Model):
     table_name = models.CharField(max_length=400)
-    created = models.DateField(auto_now_add=True, verbose_name="created")
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
 
     def __str__(self):
         return self.table_name
@@ -70,8 +70,8 @@ class FoodItem(models.Model):
     )
     drink_quantity = models.IntegerField(default=0)
     drink_metric = models.CharField(max_length=400, default="Ml", choices=METRICES)
-    created = models.DateField(auto_now_add=True, verbose_name="created")
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     description = models.TextField(blank=True)
 
     class Meta:
@@ -93,9 +93,9 @@ class DrinkItem(models.Model):
     name = models.CharField(max_length=500)
     thumbnail_image = models.FileField()
     is_a_drink = models.BooleanField(default=True)
-    created = models.DateField(auto_now_add=True, verbose_name="created")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
     type_of_drink = models.CharField(max_length=100, choices=DRINK_TYPE, blank=True)
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
 
     def __str__(self):
         return self.name
@@ -116,8 +116,8 @@ class OrderItem(models.Model):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     no_of_items = models.IntegerField(default=1)
-    created = models.DateField(auto_now_add=True, verbose_name="created")
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     status = models.CharField(max_length=500, default="Ordered", choices=ORDER_STATUS)
 
     def __str__(self):
@@ -153,8 +153,8 @@ class Order(models.Model):
     status = models.CharField(
         max_length=400, choices=ORDER_STATUS, default="Order Placed"
     )
-    created = models.DateField(auto_now_add=True, verbose_name="created")
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     cancle_reason = models.TextField(blank=True)
     is_kot_printed = models.BooleanField(default=False)
 
@@ -218,8 +218,8 @@ class Payment(models.Model):
     payment_remarks = models.TextField(blank=True)
     amount_paidd = models.FloatField(default=0)
     bank_name = models.CharField(max_length=500, blank=True)
-    created = models.DateField(auto_now_add=True, verbose_name="created")
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
 
     class Meta:
@@ -247,8 +247,8 @@ class CanclePayment(models.Model):
     status = models.CharField(
         max_length=400, choices=PAYMENT_STATUS, default="Payment Canceled"
     )
-    created = models.DateField(auto_now_add=True, verbose_name="created")
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
     cancle_reason = models.TextField(blank=True)
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
 
@@ -266,8 +266,8 @@ class CanclePayment(models.Model):
 class Vat(models.Model):
     vat_name = models.CharField(max_length=400)
     vat_percentage = models.IntegerField()
-    created = models.DateField(auto_now_add=True, verbose_name="created")
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
 
     def __str__(self):
         return self.vat_name
@@ -276,8 +276,8 @@ class Vat(models.Model):
 class Tax(models.Model):
     tax_name = models.CharField(max_length=400)
     tax_percentage = models.IntegerField()
-    created = models.DateField(auto_now_add=True, verbose_name="created")
-    updated = models.DateField(auto_now=True, verbose_name="updated")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="created")
+    updated = models.DateTimeField(auto_now=True, verbose_name="updated")
 
     def __str__(self):
         return self.tax_name
