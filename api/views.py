@@ -54,7 +54,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 import json
 import math
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -248,7 +248,8 @@ def misc_expense_report(request):
 def paymentss_report(request):
     """paginationsize = request.GET.get("perpage", "10")"""
     today = datetime.today()
-    start_date = request.GET.get("start_date", today)
+    yesterday = datetime.now() - timedelta(days=1)
+    start_date = request.GET.get("start_date", yesterday)
     end_date = request.GET.get("end_date", today)
     payments = Payment.objects.filter(
         status="Paid", created__gte=start_date, created__lte=end_date
