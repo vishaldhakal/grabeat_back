@@ -247,15 +247,12 @@ def misc_expense_report(request):
 @api_view(["GET"])
 def paymentss_report(request):
     """paginationsize = request.GET.get("perpage", "10")"""
-    today = date.today()
+    today = datetime.today()
     start_date = request.GET.get("start_date", today)
     end_date = request.GET.get("end_date", today)
-    if request.GET.get("start_date") != request.GET.get("end_date"):
-        payments = Payment.objects.filter(
-            status="Paid", created__gte=start_date, created__lte=end_date, created=today
-        ).order_by("-created")
-    else:
-        payments = Payment.objects.filter(created=today).order_by("-created")
+    payments = Payment.objects.filter(
+        status="Paid", created__gte=start_date, created__lte=end_date
+    ).order_by("-created")
 
     """ paginator = CustomPagination()
     paginator.page_size = int(paginationsize)
