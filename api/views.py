@@ -335,20 +335,12 @@ def drink_orders_report(request):
 @api_view(["GET"])
 def drink_stocks_report(request):
 
-    paginationsize = request.GET.get("perpage", "10")
     drinkstocks = DrinksStock.objects.all()
-
-    paginator = CustomPagination()
-    paginator.page_size = int(paginationsize)
-    total_data = drinkstocks.count()
-    no_of_pages = math.ceil(total_data / paginator.page_size)
-    result_page = paginator.paginate_queryset(drinkstocks, request)
-    serializer_cat = DrinkStockSerializer(result_page, many=True)
-    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+    serializer_cat = DrinkStockSerializer(drinkstocks, many=True)
 
     return Response(
         {
-            "drinkstocks": final.data,
+            "drinkstocks": serializer_cat.data,
         }
     )
 
