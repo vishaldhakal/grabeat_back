@@ -301,7 +301,7 @@ def drink_purchases_report(request):
     end_date = request.GET.get("end_date", tomorrow)
 
     drinkspurchase = DrinksPurchase.objects.filter(
-        created__gte=start_date, created__lte=end_date
+        date__gte=start_date, date__lte=end_date
     )
 
     serializer_cat = DrinkPurchaseSerializer(drinkspurchase, many=True)
@@ -316,20 +316,18 @@ def drink_purchases_report(request):
 @api_view(["GET"])
 def drink_orders_report(request):
 
-    paginationsize = request.GET.get("perpage", "10")
-    drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True)
-
-    paginator = CustomPagination()
-    paginator.page_size = int(paginationsize)
-    total_data = drinkorders.count()
-    no_of_pages = math.ceil(total_data / paginator.page_size)
-    result_page = paginator.paginate_queryset(drinkorders, request)
-    serializer_cat = OrderItemSerializer(result_page, many=True)
-    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+    today = datetime.today()
+    tomorrow = datetime.today() + timedelta(days=1)
+    start_date = request.GET.get("start_date", today)
+    end_date = request.GET.get("end_date", tomorrow)
+    drinkorders = OrderItem.objects.filter(
+        food_item__is_a_drink=True, created__gte=start_date, created__lte=end_date
+    )
+    serializer_cat = OrderItemSerializer(drinkorders, many=True)
 
     return Response(
         {
-            "drinkorders": final.data,
+            "drinkorders": serializer_cat.data,
         }
     )
 
