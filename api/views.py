@@ -173,7 +173,7 @@ def all_report(request):
     drinkspurchase_serializer = DrinkPurchaseSerializer(drinkspurchase, many=True)
     
 
-    purchases = Purchase.objects.filter(date=start_date, date=end_date)
+    purchases = Purchase.objects.filter(date__gte=start_date, date__lte=end_date)
     purchases_serializer = PurchaseSerializer(purchases, many=True)
 
     drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True,date__gte=start_date, date__lte=end_date)
