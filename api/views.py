@@ -166,23 +166,28 @@ def all_report(request):
     start_date = request.GET.get("start_date", today)
     end_date = request.GET.get("end_date", tomorrow)
 
-    payments = Payment.objects.filter(status="Paid",date__gte=start_date, date__lte=end_date)
+    payments = Payment.objects.filter(
+        status="Paid", date__gte=start_date, date__lte=end_date
+    )
     payments_serializer = PaymentSmallSerializer(payments, many=True)
 
-    drinkspurchase = DrinksPurchase.objects.filter(date__gte=start_date, date__lte=end_date)
+    drinkspurchase = DrinksPurchase.objects.filter(
+        date__gte=start_date, date__lte=end_date
+    )
     drinkspurchase_serializer = DrinkPurchaseSerializer(drinkspurchase, many=True)
-    
 
     purchases = Purchase.objects.filter(date__gte=start_date, date__lte=end_date)
     purchases_serializer = PurchaseSerializer(purchases, many=True)
 
-    drinkorders = OrderItem.objects.filter(food_item__is_a_drink=True,date__gte=start_date, date__lte=end_date)
+    drinkorders = OrderItem.objects.filter(
+        food_item__is_a_drink=True, date__gte=start_date, date__lte=end_date
+    )
     drinkorders_serializer = OrderItemSerializer(drinkorders, many=True)
 
     drinkstocks = DrinksStock.objects.all()
     drinkstocks_serializer = DrinkStockSerializer(drinkstocks, many=True)
 
-    allexps = Expenses.objects.filter(date=start_date, date=end_date)
+    allexps = Expenses.objects.filter(date__gte=start_date, date__lte=end_date)
     allexps_serializer = ExpensesSerializer(allexps, many=True)
 
     return Response(
