@@ -248,10 +248,20 @@ def misc_expense_report(request):
 def paymentss_report(request):
     """paginationsize = request.GET.get("perpage", "10")"""
     today = datetime.today()
-    yesterday = datetime.now() - timedelta(days=1)
-    start_date = request.GET.get("start_date", yesterday)
-    end_date = request.GET.get("end_date", today)
-    if start_date == end_date:
+    tomorrow = datetime.today() + timedelta(days=1)
+    if (request.GET.get("start_date") == today) and (
+        request.GET.get("end_date") == today
+    ):
+        start_date = today
+        end_date = tomorrow
+    else:
+        start_date = request.GET.get("start_date", today)
+        end_date = request.GET.get("end_date", today)
+
+    if (start_date == end_date) or (
+        (request.GET.get("start_date") == today)
+        and (request.GET.get("end_date") == today)
+    ):
         payments = Payment.objects.filter(status="Paid", created=start_date).order_by(
             "-created"
         )
