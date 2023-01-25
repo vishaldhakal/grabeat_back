@@ -295,20 +295,20 @@ def purchases_report(request):
 @api_view(["GET"])
 def drink_purchases_report(request):
 
-    paginationsize = request.GET.get("perpage", "10")
-    drinkspurchase = DrinksPurchase.objects.all()
+    today = datetime.today()
+    tomorrow = datetime.today() + timedelta(days=1)
+    start_date = request.GET.get("start_date", today)
+    end_date = request.GET.get("end_date", tomorrow)
 
-    paginator = CustomPagination()
-    paginator.page_size = int(paginationsize)
-    total_data = drinkspurchase.count()
-    no_of_pages = math.ceil(total_data / paginator.page_size)
-    result_page = paginator.paginate_queryset(drinkspurchase, request)
-    serializer_cat = DrinkPurchaseSerializer(result_page, many=True)
-    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+    drinkspurchase = DrinksPurchase.objects.filter(
+        created__gte=start_date, created__lte=end_date
+    )
+
+    serializer_cat = DrinkPurchaseSerializer(drinkspurchase, many=True)
 
     return Response(
         {
-            "drink_purchase": final.data,
+            "drink_purchase": serializer_cat.data,
         }
     )
 
