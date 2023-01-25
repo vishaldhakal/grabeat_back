@@ -249,26 +249,12 @@ def paymentss_report(request):
     """paginationsize = request.GET.get("perpage", "10")"""
     today = datetime.today()
     tomorrow = datetime.today() + timedelta(days=1)
-    if (request.GET.get("start_date") == today) and (
-        request.GET.get("end_date") == today
-    ):
-        start_date = today
-        end_date = tomorrow
-    else:
-        start_date = request.GET.get("start_date", today)
-        end_date = request.GET.get("end_date", today)
+    start_date = request.GET.get("start_date", today)
+    end_date = request.GET.get("end_date", tomorrow)
 
-    if (start_date == end_date) or (
-        (request.GET.get("start_date") == today)
-        and (request.GET.get("end_date") == today)
-    ):
-        payments = Payment.objects.filter(status="Paid", created=today).order_by(
-            "-created"
-        )
-    else:
-        payments = Payment.objects.filter(
-            status="Paid", created__gte=today, created__lte=tomorrow
-        ).order_by("-created")
+    payments = Payment.objects.filter(
+        status="Paid", created__gte=start_date, created__lte=end_date
+    ).order_by("-created")
 
     """ paginator = CustomPagination()
     paginator.page_size = int(paginationsize)
