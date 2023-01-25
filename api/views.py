@@ -262,7 +262,7 @@ def paymentss_report(request):
         (request.GET.get("start_date") == today)
         and (request.GET.get("end_date") == today)
     ):
-        payments = Payment.objects.filter(status="Paid", created=start_date).order_by(
+        payments = Payment.objects.filter(status="Paid", created=today).order_by(
             "-created"
         )
     else:
