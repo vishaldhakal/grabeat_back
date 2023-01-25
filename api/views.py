@@ -199,20 +199,13 @@ def all_report(request):
 
 @api_view(["GET"])
 def misc_expense_report(request):
-    paginationsize = request.GET.get("perpage", "10")
     allexps = Expenses.objects.all()
 
-    paginator = CustomPagination()
-    paginator.page_size = int(paginationsize)
-    total_data = allexps.count()
-    no_of_pages = math.ceil(total_data / paginator.page_size)
-    result_page = paginator.paginate_queryset(allexps, request)
-    serializer_cat = ExpensesSerializer(result_page, many=True)
-    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+    serializer_cat = ExpensesSerializer(allexps, many=True)
 
     return Response(
         {
-            "expenses": final.data,
+            "expenses": serializer_cat.data,
         }
     )
 
