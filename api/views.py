@@ -251,9 +251,14 @@ def paymentss_report(request):
     yesterday = datetime.now() - timedelta(days=1)
     start_date = request.GET.get("start_date", yesterday)
     end_date = request.GET.get("end_date", today)
-    payments = Payment.objects.filter(
-        status="Paid", created__gte=start_date, created__lte=end_date
-    ).order_by("-created")
+    if start_date == end_date:
+        payments = Payment.objects.filter(status="Paid", created=start_date).order_by(
+            "-created"
+        )
+    else:
+        payments = Payment.objects.filter(
+            status="Paid", created__gte=start_date, created__lte=end_date
+        ).order_by("-created")
 
     """ paginator = CustomPagination()
     paginator.page_size = int(paginationsize)
