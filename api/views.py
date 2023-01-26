@@ -195,8 +195,8 @@ def all_report(request):
             "payments": payments_serializer.data,
             "drinks_purchase": drinkspurchase_serializer.data,
             "purchase": purchases_serializer.data,
-            "expenses": drinkorders_serializer.data,
-            "drinkorders": allexps_serializer.data,
+            "expenses": allexps_serializer.data,
+            "drinkorders": drinkorders_serializer.data,
             "drinkstocks": drinkstocks_serializer.data,
         }
     )
