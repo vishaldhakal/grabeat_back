@@ -23,6 +23,7 @@ class PaymentSmallSerializer(serializers.ModelSerializer):
             "bank_name",
             "created",
             "payment_method",
+            "status",
         ]
         model = models.Payment
         depth = 1
