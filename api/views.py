@@ -339,28 +339,43 @@ def orderslists_report(request):
     table = request.GET.get("table", "All")
     waiter = request.GET.get("waiter", "All")
 
-    paginationsize = request.GET.get("perpage", "30")
+    today = datetime.today()
+    tomorrow = datetime.today() + timedelta(days=1)
+    start_date = request.GET.get("start_date", today)
+    end_date = request.GET.get("end_date", tomorrow)
 
     if (table == "All") & (waiter == "All"):
-        orders = Order.objects.filter(status="Order Paid")
+        orders = Order.objects.filter(
+            status="Order Paid", created__gte=start_date, created__lte=end_date
+        )
     elif (table == "All") & (waiter != "All"):
         usss = User.objects.get(username=waiter)
-        orders = Order.objects.filter(status="Order Paid", user=usss)
+        orders = Order.objects.filter(
+            status="Order Paid",
+            user=usss,
+            created__gte=start_date,
+            created__lte=end_date,
+        )
     elif (table != "All") & (waiter == "All"):
         table = Table.objects.get(table_name=table)
-        orders = Order.objects.filter(status="Order Paid", table=table)
+        orders = Order.objects.filter(
+            status="Order Paid",
+            table=table,
+            created__gte=start_date,
+            created__lte=end_date,
+        )
     else:
         usss = User.objects.get(username=waiter)
         table = Table.objects.get(table_name=table)
-        orders = Order.objects.filter(status="Order Paid", table=table, user=usss)
+        orders = Order.objects.filter(
+            status="Order Paid",
+            table=table,
+            user=usss,
+            created__gte=start_date,
+            created__lte=end_date,
+        )
 
-    paginator = CustomPagination()
-    paginator.page_size = int(paginationsize)
-    total_data = orders.count()
-    no_of_pages = math.ceil(total_data / paginator.page_size)
-    result_page = paginator.paginate_queryset(orders, request)
-    serializer_cat = OrderSerializer(result_page, many=True)
-    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+    serializer_cat = OrderSerializer(orders, many=True)
 
     subtotal = []
     for order in orders:
@@ -372,7 +387,7 @@ def orderslists_report(request):
     tabless_serializer = TableSerializer(tabless, many=True)
     return Response(
         {
-            "orderdata": final.data,
+            "orderdata": serializer_cat.data,
             "subtotal": subtotal,
             "users": userss_serializer.data,
             "tables": tabless_serializer.data,
@@ -386,28 +401,39 @@ def paymentlists_report(request):
     table = request.GET.get("table", "All")
     waiter = request.GET.get("waiter", "All")
 
-    paginationsize = request.GET.get("perpage", "30")
+    today = datetime.today()
+    tomorrow = datetime.today() + timedelta(days=1)
+    start_date = request.GET.get("start_date", today)
+    end_date = request.GET.get("end_date", tomorrow)
 
     if (table == "All") & (waiter == "All"):
-        orders = Payment.objects.filter(status="Paid")
+        orders = Payment.objects.filter(
+            status="Paid", created__gte=start_date, created__lte=end_date
+        )
     elif (table == "All") & (waiter != "All"):
-        usss = User.objects.get(username=waiter)
-        orders = Payment.objects.filter(status="Paid", user=usss)
+        usss = User.objects.get(
+            username=waiter, created__gte=start_date, created__lte=end_date
+        )
+        orders = Payment.objects.filter(
+            status="Paid", user=usss, created__gte=start_date, created__lte=end_date
+        )
     elif (table != "All") & (waiter == "All"):
         table = Table.objects.get(table_name=table)
-        orders = Payment.objects.filter(status="Paid", table=table)
+        orders = Payment.objects.filter(
+            status="Paid", table=table, created__gte=start_date, created__lte=end_date
+        )
     else:
         usss = User.objects.get(username=waiter)
         table = Table.objects.get(table_name=table)
-        orders = Payment.objects.filter(status="Paid", user=usss, table=table)
+        orders = Payment.objects.filter(
+            status="Paid",
+            user=usss,
+            table=table,
+            created__gte=start_date,
+            created__lte=end_date,
+        )
 
-    paginator = CustomPagination()
-    paginator.page_size = int(paginationsize)
-    total_data = orders.count()
-    no_of_pages = math.ceil(total_data / paginator.page_size)
-    result_page = paginator.paginate_queryset(orders, request)
-    serializer_cat = PaymentSerializer(result_page, many=True)
-    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
+    serializer_cat = PaymentSerializer(orders, many=True)
 
     userss = User.objects.all()
     userss_serializer = UserSerializer(userss, many=True)
@@ -415,7 +441,7 @@ def paymentlists_report(request):
     tabless_serializer = TableSerializer(tabless, many=True)
     return Response(
         {
-            "payments": final.data,
+            "payments": serializer_cat.data,
             "users": userss_serializer.data,
             "tables": tabless_serializer.data,
         }
