@@ -245,20 +245,12 @@ def paymentss_report(request):
 @api_view(["GET"])
 def purchases_report(request):
 
-    paginationsize = request.GET.get("perpage", "10")
     purchases = Purchase.objects.all()
 
-    paginator = CustomPagination()
-    paginator.page_size = int(paginationsize)
-    total_data = purchases.count()
-    no_of_pages = math.ceil(total_data / paginator.page_size)
-    result_page = paginator.paginate_queryset(purchases, request)
-    serializer_cat = PurchaseSerializer(result_page, many=True)
-    final = paginator.get_paginated_response(serializer_cat.data, no_of_pages)
-
+    serializer_cat = PurchaseSerializer(purchases, many=True)
     return Response(
         {
-            "purchase": final.data,
+            "purchase": serializer_cat.data,
         }
     )
 
