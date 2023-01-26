@@ -180,7 +180,10 @@ def all_report(request):
     purchases_serializer = PurchaseSerializer(purchases, many=True)
 
     drinkorders = OrderItem.objects.filter(
-        food_item__is_a_drink=True, created__gte=start_date, created__lte=end_date
+        food_item__is_a_drink=True,
+        created__gte=start_date,
+        created__lte=end_date,
+        status="Order Paid",
     )
     drinkorders_serializer = OrderItemSerializer(drinkorders, many=True)
 
@@ -284,7 +287,10 @@ def drink_orders_report(request):
     start_date = request.GET.get("start_date", today)
     end_date = request.GET.get("end_date", tomorrow)
     drinkorders = OrderItem.objects.filter(
-        food_item__is_a_drink=True, created__gte=start_date, created__lte=end_date
+        food_item__is_a_drink=True,
+        created__gte=start_date,
+        created__lte=end_date,
+        status="Order Paid",
     )
     serializer_cat = OrderItemSerializer(drinkorders, many=True)
 
