@@ -1038,9 +1038,9 @@ def paymentt(request):
             payment_method=paymentmethod,
             status="Paid",
             table=tablee,
-            tender_amount=datas["tender_amount"],
-            customer_name=datas["customer_name"],
-            pan_no=datas["pan_no"],
+            tender_amount=datas["amount_paid"],
+            customer_name=datas.get("customer_name","No Customer Name"),
+            pan_no=datas.get("pan_no","No PAN NO"),
             discount_type=datas["discount_type"],
             discount=datas["discount_value"],
             discount_percentage=datas["discount_percentage"],
@@ -1050,11 +1050,6 @@ def paymentt(request):
 
         if paymentmethod.payment_method_name == "Card":
             payme.bank_name = datas["bank_name"]
-        """ try:
-            if datas["payment_remark"]:
-                payme.payment_remarks = datas["payment_remark"]
-        except:
-            pass """
         payme.save()
 
         return JsonResponse(
