@@ -21,6 +21,7 @@ ALLOWED_HOSTS = [
     "grabeatnp.herokuapp.com",
     "grabeat-back-6tg3y.ondigitalocean.app",
     "lionfish-app-hpl8l.ondigitalocean.app",
+    "food-p115.onrender.com",
 ]
 
 # Application definition
